@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout version="0.1.0">
+	<customer_account_login>
+		<reference name="content">
+				<block type="core/template" name="react_login_page" template="react/login.phtml" />
+		</reference>
+	</customer_account_login>
+
+	<customer_account>
+		<reference name="customer_account_navigation">
+			<action method="addLink" translate="label" module="react" after="account_edit"><name>react_social_accounts</name><path>react/providers</path><label>Social Accounts</label></action>
+		</reference>
+	</customer_account>
+
+	<react_providers_index>
+		<label>Social Accounts</label>
+
+		<update handle="customer_account"/>
+		<reference name="root">
+			<action method="setTemplate"><template>page/2columns-left.phtml</template></action>
+		</reference>
+		<reference name="content">
+			<block type="react/customer_providers" name="react_providers_page" template="react/providers.phtml" />
+		</reference>
+	</react_providers_index>
+
+</layout>

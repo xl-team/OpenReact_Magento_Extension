@@ -1,0 +1,20 @@
+<div class="page-title">
+	<h1><?php echo $this->__('Social Accounts') ?></h1>
+</div>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<div class="blox-account">
+	<table>
+		<tbody>
+			<?php foreach($this->getAccounts() as $provider => $account): ?>
+			<tr>
+				<td style="width:100px"><?php echo $provider ?></td>
+				<td>
+					<?php $url = ($account['active']) ? $this->getUrl('react/providers/remove',array('provider'=>$provider)) : $this->getUrl('react/index/login',array('provider'=>$provider)); ?>
+					<?php $label = ($account['active']) ? $this->__('Remove') : $this->__('Connect'); ?>
+					<a href="<?php echo $url ?>"><?php echo $label ?></a>
+				</td>
+			</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
+</div>

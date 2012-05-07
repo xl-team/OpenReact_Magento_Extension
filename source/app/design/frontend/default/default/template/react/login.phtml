@@ -1,0 +1,5 @@
+<div class="react">
+	<?php foreach(Mage::getModel('react/services')->getProviders() as $provider): ?>
+		<a href="<?php echo $this->getUrl('react/index/login/',array('provider'=>$provider)) ?>"><?php echo $provider ?></a>
+	<?php endforeach; ?>
+</div>
