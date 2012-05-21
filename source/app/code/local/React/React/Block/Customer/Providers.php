@@ -2,24 +2,29 @@
 
 class React_React_Block_Customer_Providers extends Mage_Core_Block_Template
 {
-	protected $_accounts = array();
-
-	public function __construct()
+	
+	public function _construct()
 	{
+		$this->setTemplate('react/providers.phtml');
+		
+		$accounts = array();
 		$services = Mage::getSingleton('react/services');
-		$connected = array_flip(array_intersect($services->getProviders(), $services->userGetProviders()));
-
+		
 		foreach ($services->getProviders() as $provider)
-		{
-			$this->_accounts[$provider] = array(
-				'active' => isset($connected[$provider]),
-				'provider' => $provider,
-			);
-		}
+			$accounts[$provider] = $services->isConnected($this->getCustomer(),$provider);
+		
+		$this->setAccounts($accounts);
+		$this->setDeadlock(!$services->canRemoveProvider());
+	
 	}
 
-	public function getAccounts()
+	public function getCustomer()
 	{
-		return $this->_accounts;
+		return $this->getSession()->getCustomer();
+	}
+
+	public function getSession()
+	{
+		return Mage::getSingleton('customer/session');	
 	}
 }

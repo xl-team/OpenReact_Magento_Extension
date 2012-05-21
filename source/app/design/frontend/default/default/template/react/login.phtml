@@ -1,5 +1,49 @@
-<div class="react">
-	<?php foreach(Mage::getModel('react/services')->getProviders() as $provider): ?>
-		<a href="<?php echo $this->getUrl('react/index/login/',array('provider'=>$provider)) ?>"><?php echo $provider ?></a>
+<?php  
+$_providers = $this->getProviders();
+$_heading = $this->getHeadingTag();
+?>
+
+ <?php /** if($provider_info = $this->getProviderInfo()): ?>
+
+<script type="text/javascript">
+	document.observe('dom:loaded',function(){
+		$$('input[name="firstname"]')[0].value = '<?php echo $provider_info['first_name'] ?>';
+		$$('input[name="lastname"]')[0].value = '<?php echo $provider_info['last_name'] ?>';
+		$$('input[name="email"]')[0].value = '';	
+		$$('input[name="password"]')[0].value = '';
+	});
+</script>
+
+<?php else: */ ?>
+<div class="<?php echo $this->getCssClass() ?> react-login">
+	<<?php echo $_heading ?> class="legend"><?php echo $this->getTitle(); ?></<?php echo $_heading ?>>
+	<p><?php echo $this->getDescription() ?></p>
+	<p><?php echo $this->__('Select your network:') ?></p>
+	<div class="links">
+	<?php foreach($_providers as $provider): ?>
+		<label for="sign-<?php echo $provider ?>" class="provider" title="<?php echo $provider ?>">
+			<span class="image <?php echo strtolower($provider) ?>"></span><br /><br />
+			<input id="sign-<?php echo $provider ?>" type="radio" name="social_network" value="<?php echo $provider ?>" /><span><?php echo $provider ?></span><br />
+		</label>
 	<?php endforeach; ?>
+	</div>
+	<div class="button-container">
+		<button onclick="reactAutenticate()" class="button">
+			<span><span>
+			<?php echo $this->__('Autenticate') ?>
+			</span></span>
+		</button>
+ 	</div>
 </div>
+<div class="clear"></div>
+
+<script type="text/javascript">
+	function reactAutenticate()
+	{
+		var provider = $$('input[name="social_network"]:checked')[0];	
+		if(provider){
+			window.location.href = '<?php echo $this->getLoginUrl() ?>'+provider.value;
+		}
+	}
+</script>
+<?php #endif; ?> 

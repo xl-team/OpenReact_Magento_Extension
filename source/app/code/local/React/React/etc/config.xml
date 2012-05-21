@@ -57,6 +57,21 @@
 					</react_remove_user>
 				</observers>
 			</customer_delete_before>
+			<customer_login>
+				<observers>
+					<react_remove_user>
+						<class>React_React_Model_Observer</class>
+						<method>renewSession</method>
+					</react_remove_user>
+				</observers>	
+			</customer_login>
 		</events>
 	</global>
+	<default>
+		<react>
+			<settings>
+				<description>Save time and skip the hassle of creating yet another account. Just use your favorite Social Network to login or register!</description>
+			</settings>
+		</react>		
+	</default>
 </config>

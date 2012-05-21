@@ -2,22 +2,36 @@
 
 class React_React_Model_Services extends Mage_Core_Model_Abstract
 {
+	const PROVIDERS_LIMIT = 1;
+	const SESSION_VARIABLE = 'react_connected_providers';
+	const CACHE_VARIABLE = 'react_provider_list';
+	
 	protected $_eventPrefix = 'react_services';
 	protected $_eventObject = 'react_services';
-
+	
+	protected $_canRemoveProvider = null;
+	protected $_redirectUrl;
+	protected $_connectedProviders;
+	
 	public function __construct()
 	{
-		$this->setData('client',Mage::helper('react/client_magentoservices'));
+		
+			
+		$this->setClient(Mage::helper('react/client_magentoservices'));
+		$redirect_url = 'react/'.Mage::app()->getRequest()->getControllerName().'/process';
+		$this->_redirectUrl = Mage::getUrl($redirect_url);
+		
+		$this->_connectedProviders = $this->getSession()->getData(self::SESSION_VARIABLE);	
 	}
 
 	public function getProviders()
 	{
-		$providers = Mage::getSingleton('core/cache')->load('react_provider_list');
+		$providers = Mage::getSingleton('core/cache')->load(self::CACHE_VARIABLE);
 
 		if (!$providers)
 		{
 			$providers = serialize($this->getClient()->OAuthServer->getProviders());
-			Mage::getSingleton('core/cache')->save($providers, 'react_provider_list', array('react_magento_plugin', 86400));
+			Mage::getSingleton('core/cache')->save($providers, self::CACHE_VARIABLE, array('react_magento_plugin', 86400));
 		}
 
 		return unserialize($providers);
@@ -25,7 +39,7 @@ class React_React_Model_Services extends Mage_Core_Model_Abstract
 
 	public function tokenRequest($provider = null)
 	{
-		return $this->getClient()->OAuthServer->tokenRequest($provider, Mage::getUrl('react/index/process/'));
+		return $this->getClient()->OAuthServer->tokenRequest($provider, $this->_redirectUrl);
 	}
 
 	public function tokenAccess($params)
@@ -38,26 +52,71 @@ class React_React_Model_Services extends Mage_Core_Model_Abstract
 		$this->getClient()->OAuthServer->tokenSetUserId($id, $session);
 	}
 
-	public function userRemoveProvider($customer_id, $provider)
+	public function userRemoveProvider($customer_id, $provider,$event = false)
 	{
-		$this->getClient()->OAuthServer->userRemoveProvider($customer_id,$provider);
+		$flag = ($event) ? true : $this->canRemoveProvider();
+		if($flag)
+			$this->getClient()->OAuthServer->userRemoveProvider($customer_id,$provider);
 	}
 
-	public function tokenUpdate(Mage_Customer_Model_Customer $customer, array $result)
+	public function updateAccount(Mage_Customer_Model_Customer $customer, array $result)
 	{
-		if (isset($result['applicationUserId']))
-			$this->userRemoveProvider($result['applicationUserId'], $result['connectedWithProvider']);
-
-		$this->tokenSetUserId($customer->getId(),$result['reactOAuthSession']);
+		if (isset($result['applicationUserId']) && !$this->isConnected($customer,$result['connectedWithProvider']));
+			$this->tokenSetUserId($customer->getId(),$result['reactOAuthSession']);
+			$this->resetConnectedProviders();
 	}
 
 	public function userGetProviders($customer_id = false)
 	{
 		if (!$customer_id)
-			$customer_id = Mage::helper('customer')->getCustomer()->getId();
+			$customer_id = $this->getCustomer()->getId();
 
 		$connected = $this->getClient()->OAuthServer->userGetProviders($customer_id);
 
 		return $connected['connectedWithProviders'];
 	}
+
+	public function getConnectedAccounts($customer_id = false) 
+	{
+ 		if(is_null($this->_connectedProviders))
+ 		{
+			$this->_connectedProviders = array_intersect($this->getProviders(), $this->userGetProviders($customer_id));
+			$this->getSession()->addData('react_connected_providers',$this->_connectedProviders);
+		}
+		
+		$this->_canRemoveProvider = count($this->_connectedProviders) > self::PROVIDERS_LIMIT;
+					
+		return $this->_connectedProviders;
+	}
+	
+	public function canRemoveProvider()
+	{
+		if(is_null($this->_canRemoveProvider))
+			$this->getConnectedAccounts();	
+	
+		return $this->_canRemoveProvider;
+	}
+	
+	public function getSession()
+	{
+		return Mage::getSingleton('customer/session');
+	}
+	
+	public function getCustomer()
+	{
+		return $this->getSession()->getCustomer();
+	}
+	
+	public function resetConnectedProviders()
+	{
+		$this->_connectedProviders = null;
+		$this->getSession()->unsetData(self::SESSION_VARIABLE);	
+	}
+	
+	public function isConnected(Mage_Customer_Model_Customer $customer, $provider = '')
+	{
+		$connected = array_flip($this->getConnectedAccounts());
+		return isset($connected[$provider]);
+	}
+	
 }

@@ -6,6 +6,6 @@ This is a pre-release, UNSTABLE, beta version of a Magento plugin we are working
 Installation instructions
 =========================
 
-1. Checkout the source/app directory into {MAGENTO_ROOT}/app
+1. Checkout the source directory into {MAGENTO_ROOT} 
 2. Flush caches in Magento admin (System / Cache Management / Flush Magento Cache)
-3. Fix userroles. Go to System / Permissions / Users and System / Permission / Roles. Opening both pages should be enough for Magento to update permission rules.
+3. After installing the the module, if you are loggedin to the adminiatration, you need to logout and log back in.   
