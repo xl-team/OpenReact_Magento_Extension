@@ -8,4 +8,4 @@ Installation instructions
 
 1. Checkout the source directory into {MAGENTO_ROOT} 
 2. Flush caches in Magento admin (System / Cache Management / Flush Magento Cache)
-3. After installing the the module, if you are loggedin to the adminiatration, you need to logout and log back in.   
+3. After installing the the module, if you are logged in to the administration, you need to logout and log back in. 
