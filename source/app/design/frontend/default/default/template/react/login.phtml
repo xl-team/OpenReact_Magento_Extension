@@ -28,7 +28,7 @@ $_heading = $this->getHeadingTag();
 	<?php endforeach; ?>
 	</div>
 	<div class="button-container">
-		<button onclick="reactAutenticate()" class="button">
+		<button onclick="reactAuthenticate()" class="button">
 			<span><span>
 			<?php echo $this->__('Autenticate') ?>
 			</span></span>
@@ -38,7 +38,7 @@ $_heading = $this->getHeadingTag();
 <div class="clear"></div>
 
 <script type="text/javascript">
-	function reactAutenticate()
+	function reactAuthenticate()
 	{
 		var provider = $$('input[name="social_network"]:checked')[0];	
 		if(provider){

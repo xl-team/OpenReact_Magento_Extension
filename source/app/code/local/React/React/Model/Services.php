@@ -5,18 +5,14 @@ class React_React_Model_Services extends Mage_Core_Model_Abstract
 	const PROVIDERS_LIMIT = 1;
 	const SESSION_VARIABLE = 'react_connected_providers';
 	const CACHE_VARIABLE = 'react_provider_list';
-	
 	protected $_eventPrefix = 'react_services';
 	protected $_eventObject = 'react_services';
-	
 	protected $_canRemoveProvider = null;
 	protected $_redirectUrl;
 	protected $_connectedProviders;
 	
 	public function __construct()
 	{
-		
-			
 		$this->setClient(Mage::helper('react/client_magentoservices'));
 		$redirect_url = 'react/'.Mage::app()->getRequest()->getControllerName().'/process';
 		$this->_redirectUrl = Mage::getUrl($redirect_url);
@@ -52,18 +48,20 @@ class React_React_Model_Services extends Mage_Core_Model_Abstract
 		$this->getClient()->OAuthServer->tokenSetUserId($id, $session);
 	}
 
-	public function userRemoveProvider($customer_id, $provider,$event = false)
+	public function userRemoveProvider($customer_id, $provider, $event = false)
 	{
 		$flag = ($event) ? true : $this->canRemoveProvider();
-		if($flag)
-			$this->getClient()->OAuthServer->userRemoveProvider($customer_id,$provider);
+		if ($flag)
+			$this->getClient()->OAuthServer->userRemoveProvider($customer_id, $provider);
 	}
 
 	public function updateAccount(Mage_Customer_Model_Customer $customer, array $result)
 	{
-		if (isset($result['applicationUserId']) && !$this->isConnected($customer,$result['connectedWithProvider']));
-			$this->tokenSetUserId($customer->getId(),$result['reactOAuthSession']);
+		if (isset($result['applicationUserId']) && !$this->isConnected($customer,$result['connectedWithProvider']))
+		{
+			$this->tokenSetUserId($customer->getId(), $result['reactOAuthSession']);
 			$this->resetConnectedProviders();
+		}
 	}
 
 	public function userGetProviders($customer_id = false)
