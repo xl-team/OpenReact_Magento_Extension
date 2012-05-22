@@ -1,0 +1,25 @@
+.clear {clear:both}
+
+.react-login {margin-bottom:30px} 
+.react-login .provider {padding:17px 0;margin:0 30px 0 0 ;display:block;float:left;cursor:pointer}
+.react-login .provider input {margin-right: 5px;}
+.react-login span.image, .react-providers span.image {padding:17px 24px;}
+
+.react-login span.facebook, .react-providers span.facebook {background:url(images/sprite.png) 0 -99px no-repeat transparent;}
+.react-login span.twitter, .react-providers span.twitter  {background:url(images/sprite.png) 0 -50px no-repeat transparent}
+.react-login span.google, .react-providers span.google {background:url(images/sprite.png) 0 -197px no-repeat transparent}
+.react-login span.windowslive, .react-providers span.windowslive {background:url(images/sprite.png) 0 -246px no-repeat transparent}
+.react-login span.linkedin, .react-providers span.linkedin {background:url(images/sprite.png) 0 -1px no-repeat transparent}
+.react-login span.yahoo, .react-providers span.yahoo {background:url(images/sprite.png) 0 -540px no-repeat transparent}
+.react-login span.foursquare, .react-providers span.foursquare {background:url(images/sprite.png) 0 -491px no-repeat transparent}
+.react-login span.myspace, .react-providers span.myspace{background:url(images/sprite.png) 0 -295px no-repeat transparent}
+.react-login span.hyves, .react-providers span.hyves  {background:url(images/sprite.png) 0 -148px no-repeat transparent}
+
+.react-login .links {text-align: center;height:48px;margin:0 auto;padding-top:10px}
+.react-login .button-container {clear:both;text-align:right}
+
+.react-providers td {vertical-align:middle}
+.react-providers td .action {display:block;padding-bottom: 37px;}
+td.provider-container {width:60px;height:75px;text-align:center}
+
+.account-login.react .content {min-height:0}
