@@ -1,0 +1,12 @@
+<?php $_defaults = $this->getDefaults() ?>
+<form id="react_share" method="post" action="<?php echo $this->getFormUrl() ?>"> 
+	<button type="submit" class="button">
+		<span><span>Share</span></span>
+	</button>
+	
+	<input type="hidden" name="url" value="<?php echo $_defaults['url'] ?>" />
+	<input type="hidden" name="img" value="<?php echo $_defaults['img'] ?>" />
+	<input type="hidden" name="title" value="<?php echo $_defaults['title'] ?>"/>
+	<input type="hidden" name="description" value="<?php echo $_defaults['description'] ?>" />
+</form>
+

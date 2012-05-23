@@ -1,0 +1,17 @@
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<div class="page-title">
+	<h1><?php echo $this->__('Please add a message:') ?></h1>
+</div>
+<form method="post" action="<?php echo $this->getFormAction() ?>">
+	<ul class="form-list">
+		<li>
+			<textarea name="message"></textarea>	
+		</li>
+	</ul>
+	<?php echo $this->getLoginForm(); ?>
+	<div class="button-container">
+		<button class="button">
+			<span><span><?php echo $this->__('Post Message') ?></span></span>
+		</button>
+	</div>
+</form>
