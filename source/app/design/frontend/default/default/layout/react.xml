@@ -22,16 +22,7 @@
 			
 		</reference>	
 	</customer_account_create>
-	 
-	<checkout_onepage_index>
-		<reference name="checkout.onepage.login.before">
-			<block type="react/login" name="react_checkout_page" template="react/login.phtml"> 
-				<action method="setHeadingTag"><value>h3</value></action>
-			</block>
-		</reference>	
-	</checkout_onepage_index>
-	
-	
+
 	<customer_account>
 		<reference name="customer_account_navigation">
 			<action method="addLink" translate="label" module="react" after="account_edit">
@@ -41,6 +32,41 @@
 				</action>
 		</reference>
 	</customer_account>
+	 
+	<checkout_onepage_index>
+		<reference name="checkout.onepage.login.before">
+			<block type="react/login" name="react_checkout_page" template="react/login.phtml"> 
+				<action method="setHeadingTag"><value>h3</value></action>
+			</block>
+		</reference>	
+	</checkout_onepage_index>
+	
+	<catalog_product_view>
+		<reference name="content">
+			<block type="react/share" />
+		</reference>
+	</catalog_product_view>
+	
+	<catalog_category_default>
+		<reference name="content">
+			<block type="react/share" />	
+		</reference>
+	</catalog_category_default>
+	
+	<cms_page>
+		<reference name="content">
+			<block type="react/share" />
+		</reference>
+	</cms_page>
+	
+	<react_share_message>
+		<reference name="root">
+			<action method="setTemplate"><template>page/1column.phtml</template></action>
+		</reference>
+		<reference name="content">
+			<block type="react/share_message" />
+		</reference>		
+	</react_share_message>
 	
 	<react_index_email>
 		<label>Email Address</label>	
@@ -54,7 +80,6 @@
 		
 	<react_providers_index>
 		<label>Social Accounts</label>
-
 		<update handle="customer_account"/>
 		<reference name="root">
 			<action method="setTemplate"><template>page/2columns-left.phtml</template></action>

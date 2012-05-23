@@ -2,19 +2,6 @@
 $_providers = $this->getProviders();
 $_heading = $this->getHeadingTag();
 ?>
-
- <?php /** if($provider_info = $this->getProviderInfo()): ?>
-
-<script type="text/javascript">
-	document.observe('dom:loaded',function(){
-		$$('input[name="firstname"]')[0].value = '<?php echo $provider_info['first_name'] ?>';
-		$$('input[name="lastname"]')[0].value = '<?php echo $provider_info['last_name'] ?>';
-		$$('input[name="email"]')[0].value = '';	
-		$$('input[name="password"]')[0].value = '';
-	});
-</script>
-
-<?php else: */ ?>
 <div class="<?php echo $this->getCssClass() ?> react-login">
 	<<?php echo $_heading ?> class="legend"><?php echo $this->getTitle(); ?></<?php echo $_heading ?>>
 	<p><?php echo $this->getDescription() ?></p>
@@ -27,6 +14,7 @@ $_heading = $this->getHeadingTag();
 		</label>
 	<?php endforeach; ?>
 	</div>
+	<?php if ($this->showButton()): ?>
 	<div class="button-container">
 		<button onclick="reactAuthenticate()" class="button">
 			<span><span>
@@ -34,16 +22,16 @@ $_heading = $this->getHeadingTag();
 			</span></span>
 		</button>
  	</div>
-</div>
-<div class="clear"></div>
-
-<script type="text/javascript">
-	function reactAuthenticate()
-	{
-		var provider = $$('input[name="social_network"]:checked')[0];	
-		if(provider){
-			window.location.href = '<?php echo $this->getLoginUrl() ?>'+provider.value;
+	<script type="text/javascript">
+		function reactAuthenticate()
+		{
+			var provider = $$('input[name="social_network"]:checked')[0];	
+			if(provider)
+			{
+				window.location.href = '<?php echo $this->getLoginUrl() ?>'+provider.value;
+			}
 		}
-	}
-</script>
-<?php #endif; ?> 
+	</script>
+	<?php endif; ?>
+</div>
+<div style="clear:both"></div>

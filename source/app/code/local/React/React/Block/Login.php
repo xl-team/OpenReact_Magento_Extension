@@ -12,33 +12,17 @@ class React_React_Block_Login extends Mage_Core_Block_Template
 		$this->setFieldset(false);
 		$this->setHeadingTag('h1');		
 		$this->_isCheckout();
-		
-		#$this->_noEmail();
+		$this->setShowButton(true);
 				
 		parent::_construct();	
 	
 		
-	}		
-	
-	/** protected function _noEmail()
-	{
-		$no_provider = $this->getRequest()->getParam('react') == 'no_provider';	
-		$provider_info = $this->getSession()->getData('react_no_email',true);
-		
-		
-		if(!is_array($provider_info))
-			return;
-		
-		$name = explode(' ',$provider_info['real_name'],2);
-		$provider_info['first_name'] = $name[0];
-		$provider_info['last_name'] = $name[1];
-		$this->setProviderInfo($provider_info);
-	} */
+	}
 	
 	protected function _isCheckout()
 	{
-		 $isCheckout = $this->getRequest()->getModuleName() == 'checkout';
-		 $this->setIsCheckout($isCheckout);
+ 		$isCheckout = $this->getRequest()->getModuleName() == 'checkout';
+ 		$this->setIsCheckout($isCheckout);
 	}
 	
 	public function isCheckout()
@@ -63,9 +47,16 @@ class React_React_Block_Login extends Mage_Core_Block_Template
 	
 	public function getDescription()
 	{
-		return Mage::getStoreConfig('react/settings/description');
+		if (!isset($this->_data['description']))
+			return Mage::getStoreConfig('react/settings/description');
+		
+		return $this->_data['description'];
 	}
  	
+ 	public function showButton()
+ 	{
+		return (bool) $this->getShowButton(); 	
+ 	}
  	
  	public function getSession()
  	{

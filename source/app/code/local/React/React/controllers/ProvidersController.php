@@ -25,12 +25,12 @@ class React_React_ProvidersController extends Mage_Core_Controller_Front_Action 
 	{
 		$this->_redirect('react/providers');
 		
-		if(!$this->getSession()->isLoggedIn())	
+		if (!$this->getSession()->isLoggedIn())	
 			return;
 	
 		$service = Mage::getSingleton('react/services');
 		$result = $service->tokenAccess($this->getRequest()->getParams());
-		if(isset($result['reactOAuthSession']))
+		if (isset($result['reactOAuthSession']))
 		{
 			$add_request = $service->tokenSetUserId($this->getCustomer()->getId(), $result['reactOAuthSession']);	
 			$this->getSession()->addSuccess($this->__('You have successfully connected your %s account.',$add_request['connectedWithProvider']));
@@ -40,9 +40,6 @@ class React_React_ProvidersController extends Mage_Core_Controller_Front_Action 
 		{
 			$this->getSession()->addError($this->__('An error has occured while trying to connect your social account.'));
 		}
-		
-		
-	
 	}
 	
 	public function removeAction()

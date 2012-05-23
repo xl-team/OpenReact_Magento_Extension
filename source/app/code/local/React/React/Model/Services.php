@@ -1,6 +1,6 @@
 <?php
 
-class React_React_Model_Services extends Mage_Core_Model_Abstract
+class React_React_Model_Services extends Varien_Object
 {
 	const PROVIDERS_LIMIT = 1;
 	const SESSION_VARIABLE = 'react_connected_providers';
@@ -13,11 +13,13 @@ class React_React_Model_Services extends Mage_Core_Model_Abstract
 	
 	public function __construct()
 	{
+		parent::__construct();
 		$this->setClient(Mage::helper('react/client_magentoservices'));
 		$redirect_url = 'react/'.Mage::app()->getRequest()->getControllerName().'/process';
 		$this->_redirectUrl = Mage::getUrl($redirect_url);
 		
 		$this->_connectedProviders = $this->getSession()->getData(self::SESSION_VARIABLE);	
+		
 	}
 
 	public function getProviders()
@@ -57,7 +59,7 @@ class React_React_Model_Services extends Mage_Core_Model_Abstract
 
 	public function updateAccount(Mage_Customer_Model_Customer $customer, array $result)
 	{
-		if (isset($result['applicationUserId']) && !$this->isConnected($customer,$result['connectedWithProvider']))
+		if (isset($result['applicationUserId']) && !$this->isConnected($customer, $result['connectedWithProvider']))
 		{
 			$this->tokenSetUserId($customer->getId(), $result['reactOAuthSession']);
 			$this->resetConnectedProviders();
@@ -79,7 +81,7 @@ class React_React_Model_Services extends Mage_Core_Model_Abstract
  		if(is_null($this->_connectedProviders))
  		{
 			$this->_connectedProviders = array_intersect($this->getProviders(), $this->userGetProviders($customer_id));
-			$this->getSession()->addData('react_connected_providers',$this->_connectedProviders);
+			$this->getSession()->addData('react_connected_providers', $this->_connectedProviders);
 		}
 		
 		$this->_canRemoveProvider = count($this->_connectedProviders) > self::PROVIDERS_LIMIT;
@@ -111,10 +113,13 @@ class React_React_Model_Services extends Mage_Core_Model_Abstract
 		$this->getSession()->unsetData(self::SESSION_VARIABLE);	
 	}
 	
-	public function isConnected(Mage_Customer_Model_Customer $customer, $provider = '')
-	{
+	public function isConnected(Mage_Customer_Model_Customer $customer, $provider = null)
+	{	
+		
+		if(is_null($provider))
+			return (bool)count($this->getConnectedAccounts());
+		
 		$connected = array_flip($this->getConnectedAccounts());
 		return isset($connected[$provider]);
-	}
-	
+	}	
 }
