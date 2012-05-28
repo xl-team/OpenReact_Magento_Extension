@@ -1,12 +1,31 @@
 <?php $_defaults = $this->getDefaults() ?>
-<form id="react_share" method="post" action="<?php echo $this->getFormUrl() ?>"> 
-	<button type="submit" class="button">
+<div id="react_share"> 
+	<button type="button" onclick="reactShare()" class="button">
 		<span><span>Share</span></span>
 	</button>
 	
-	<input type="hidden" name="url" value="<?php echo $_defaults['url'] ?>" />
-	<input type="hidden" name="img" value="<?php echo $_defaults['img'] ?>" />
-	<input type="hidden" name="title" value="<?php echo $_defaults['title'] ?>"/>
-	<input type="hidden" name="description" value="<?php echo $_defaults['description'] ?>" />
-</form>
+	<input type="hidden" name="react_url" value="<?php echo $_defaults['url'] ?>" />
+	<input type="hidden" name="react_img" value="<?php echo $_defaults['img'] ?>" />
+	<input type="hidden" name="react_title" value="<?php echo $_defaults['title'] ?>"/>
+	<input type="hidden" name="react_description" value="<?php echo $_defaults['description'] ?>" />
+</div>
+
+<script type="text/javascript">
+	function reactShare()
+	{
+ 		var react_form = document.createElement('form');
+		react_form.action = '<?php echo $this->getFormUrl(); ?>';
+		react_form.method = 'post';
+		for (i=0; i<4; i++)
+		{
+			var react_input = document.createElement('input');
+			var source_input = $$('#react_share input')[i];
+			react_input.value = source_input.value;
+			react_input.name = source_input.name.replace(/react_/gi,'');
+			react_form.appendChild(react_input);
+		}
+		document.body.appendChild(react_form);
+		react_form.submit();
+	}		
+</script>
 

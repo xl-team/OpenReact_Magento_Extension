@@ -47,11 +47,11 @@ class React_React_IndexController extends Mage_Core_Controller_Front_Action
 		$service = Mage::getSingleton('react/services');
 		$result = $service->tokenAccess($this->getRequest()->getParams());
 		$status = $_helper->processRequest($result);
-		$redirect = (string)$_helper;
-		if (!$redirect && !$status)
-			$this->getSession()->addError($this->__('We are sorry you can not conect using %s',$result['connectedWithProvider']));	
-		else if ($redirect);
-			$this->_redirect($redirect);
+		
+		if (!$status)
+			$this->getSession()->addError($this->__('We are sorry you can not connect using %s.',$result['connectedWithProvider']));	
+		
+		$this->_redirect($_helper->getRedirect());
 	}
 	
 	public function emailAction()
@@ -83,7 +83,7 @@ class React_React_IndexController extends Mage_Core_Controller_Front_Action
 		$status = $_helper->processRequest($result);
 		if (!$status)
 		{
-			$this->getSession()->addError($this->__('We are sorry you can not conect using %s',$result['connectedWithProvider']));	
+			$this->getSession()->addError($this->__('We are sorry you can not connect using %s.',$result['connectedWithProvider']));	
 			$this->getSession()->unsetData($_helper::NO_EMAIL_VARIABLE);
 			return;			
 		}

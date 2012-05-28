@@ -3,7 +3,12 @@ class React_React_Helper_Process extends Mage_Core_Helper_Abstract
 {
 	const NO_EMAIL_VARIABLE = 'react_no_email';
 	const SHARE_VARIABLE = 'react_share_info';
-	public $_redirect = null;
+	const REDIRECT = 'react_redirect';
+	
+	public function __construct()
+	{
+		Mage::register(self::REDIRECT,'customer/account');
+	}
 	
 	public function processRequest(array $result)
 	{
@@ -20,7 +25,9 @@ class React_React_Helper_Process extends Mage_Core_Helper_Abstract
 			
 			if ($customer->getId())
 			{
-				$this->getServices()->updateAccount($customer, $result);
+				#$this->getServices()->updateAccount($customer, $result);
+				$this->getSession()->addError($this->__('This email is all ready in use. Please login before connecting a new social account.'));
+				return true;
 			}
 			else 
 			{
@@ -31,9 +38,10 @@ class React_React_Helper_Process extends Mage_Core_Helper_Abstract
 		}
 		
 		$this->getSession()->setCustomerAsLoggedIn($customer);
+		$this->getSession()->addSuccess($this->__('You have successfully logged in using your %s account.',$result['connectedWithProvider']));
 		
 		if ($this->getSession()->getData(self::SHARE_VARIABLE))
-			$this->_redirect = 'react/share';
+			$this->_redirect('react/share');
 			
 		return true;
 	}
@@ -81,14 +89,14 @@ class React_React_Helper_Process extends Mage_Core_Helper_Abstract
 		else
 		{
 			$this->_noMail($result);	
-			return false;
+			return true;
 		}
 	}
 	
 	protected function _noMail(array $result = array())
 	{
 		$this->getSession()->setData(self::NO_EMAIL_VARIABLE, $result);
-		$this->_redirect = 'react/index/email';	
+		$this->_redirect('react/index/email');	
 	}
 	
 	public function getServices()
@@ -101,8 +109,15 @@ class React_React_Helper_Process extends Mage_Core_Helper_Abstract
 		return Mage::getSingleton('customer/session');
 	}
 	
-	public function __toString()
+	
+	protected function _redirect($redirect = '')
 	{
-		return $this->_redirect;
+		Mage::unregister(self::REDIRECT);
+		Mage::register(self::REDIRECT,(string)$redirect);
+	}
+	
+	public function getRedirect()
+	{
+		return Mage::registry(self::REDIRECT);
 	}
 }

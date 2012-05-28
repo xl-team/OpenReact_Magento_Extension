@@ -24,7 +24,7 @@ class React_React_ShareController extends Mage_Core_Controller_Front_Action
 			$this->_redirect('react/share/message');
 			return;
 		}
-
+	
 		$message = Mage::getModel('react/share_message')->init($data);
 		$status = Mage::getModel('react/share')->postMessage($message);
 
@@ -84,16 +84,12 @@ class React_React_ShareController extends Mage_Core_Controller_Front_Action
 	{
 		$_helper = Mage::helper('react/process');
 		
-		$service = Mage::getSingleton('react/services');
 		$result = $_helper->getServices()->tokenAccess($this->getRequest()->getParams());
-		$status =  $_helper->processRequest($result);		
+		$status =  $_helper->processRequest($result);
+		if (!$status)
+			$this->getSession()->addError($this->__('We are sorry you can not connect using %s',$result['connectedWithProvider']));	
 		
-		$redirect = (string)$_helper;
-		
-		if (!$redirect && !$status)
-			$this->getSession()->addError($this->__('We are sorry you can not conect using %s',$result['connectedWithProvider']));	
-		else if($redirect)
-			$this->_redirect($redirect);
+		$this->_redirect($_helper->getRedirect());
 	}
 	
 	public function getSession()

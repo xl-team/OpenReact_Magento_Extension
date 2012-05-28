@@ -42,14 +42,14 @@
 	</checkout_onepage_index>
 	
 	<catalog_product_view>
-		<reference name="content">
-			<block type="react/share" />
+		<reference name="product.info.extrahint">
+			<block type="react/share" name="react_product_share" as="other" />
 		</reference>
 	</catalog_product_view>
 	
 	<catalog_category_default>
 		<reference name="content">
-			<block type="react/share" />	
+			<block type="react/share" name="react_category_share" />	
 		</reference>
 	</catalog_category_default>
 	
