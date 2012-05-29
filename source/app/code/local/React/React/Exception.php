@@ -15,6 +15,6 @@ class React_React_Exception extends Mage_Core_Exception
 	
 	public function getSession()
 	{
-		return Mage::getSingleton('customer/session');
+		return Mage::getSingleton('core/session');
 	}
 }

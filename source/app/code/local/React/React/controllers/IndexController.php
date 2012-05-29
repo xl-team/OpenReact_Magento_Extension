@@ -15,7 +15,7 @@ class React_React_IndexController extends Mage_Core_Controller_Front_Action
 		
 		$this->_redirect('customer/account');
 		
-		if ($this->getSession()->isLoggedIn())
+		if (Mage::helper('customer')->isLoggedIn())
 			return;
 		
 		$provider = $this->getRequest()->getParam('provider');
@@ -32,31 +32,24 @@ class React_React_IndexController extends Mage_Core_Controller_Front_Action
 
 	public function processAction()
 	{
-		
 		$_helper = Mage::helper('react/process');
-		if ($this->getSession()->getData('react_checkout'))
-	 		$this->_redirect('checkout'); 
-	 	else 
-	 		$this->_redirect('customer/account');	
+			
+	 	$this->_redirect($_helper->getRedirect());
 	 	
-	 	if ($this->getSession()->isLoggedIn())
+	 	if (Mage::helper('customer')->isLoggedIn())
 	 		return;
 		
-	 	$this->getSession()->unsetData('react_checkout');
-		
-		$service = Mage::getSingleton('react/services');
-		$result = $service->tokenAccess($this->getRequest()->getParams());
+		$result = $_helper->getServices()->tokenAccess($this->getRequest()->getParams());
 		$status = $_helper->processRequest($result);
 		
 		if (!$status)
 			$this->getSession()->addError($this->__('We are sorry you can not connect using %s.',$result['connectedWithProvider']));	
-		
-		$this->_redirect($_helper->getRedirect());
 	}
 	
 	public function emailAction()
 	{
 		$_helper = Mage::helper('react/process');
+		
 		if (!$this->getSession()->getData($_helper::NO_EMAIL_VARIABLE))
 		{
 			$this->_redirect('customer/account');
@@ -83,7 +76,7 @@ class React_React_IndexController extends Mage_Core_Controller_Front_Action
 		$status = $_helper->processRequest($result);
 		if (!$status)
 		{
-			$this->getSession()->addError($this->__('We are sorry you can not connect using %s.',$result['connectedWithProvider']));	
+			$this->getSession()->addError($this->__('We are sorry you can not connect using %s.', $result['connectedWithProvider']));	
 			$this->getSession()->unsetData($_helper::NO_EMAIL_VARIABLE);
 			return;			
 		}
@@ -93,11 +86,9 @@ class React_React_IndexController extends Mage_Core_Controller_Front_Action
 		} 
 	}
 	
-	
-	
 	public function getSession()
 	{
-		return Mage::getSingleton('customer/session');
+		return Mage::getSingleton('core/session');
 	}
 }
 ?>

@@ -51,7 +51,7 @@ class React_React_ShareController extends Mage_Core_Controller_Front_Action
 	{
 		$_helper = Mage::helper('react/process');
 		$post = $this->getRequest()->getPost();
-		if (empty($post['social_network']) && !$this->getSession()->isLoggedIn())
+		if (empty($post['social_network']) && !Mage::helper('customer')->isLoggedIn())
 		{
 			$this->getSession()->addError($this->__("You need to login in order to share."));
 			$this->_redirect('*/*/message');
@@ -94,6 +94,6 @@ class React_React_ShareController extends Mage_Core_Controller_Front_Action
 	
 	public function getSession()
 	{
-		return Mage::getSingleton('customer/session');	
+		return Mage::getSingleton('core/session');	
 	}
 }

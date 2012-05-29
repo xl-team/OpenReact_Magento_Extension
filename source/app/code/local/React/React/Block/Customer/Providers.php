@@ -20,11 +20,11 @@ class React_React_Block_Customer_Providers extends Mage_Core_Block_Template
 
 	public function getCustomer()
 	{
-		return $this->getSession()->getCustomer();
+		return Mage::getSingleton('customer/session')->getCustomer();
 	}
 
 	public function getSession()
 	{
-		return Mage::getSingleton('customer/session');	
+		return Mage::getSingleton('core/session');	
 	}
 }

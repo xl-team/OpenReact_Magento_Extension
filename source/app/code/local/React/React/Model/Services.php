@@ -99,12 +99,12 @@ class React_React_Model_Services extends Varien_Object
 	
 	public function getSession()
 	{
-		return Mage::getSingleton('customer/session');
+		return Mage::getSingleton('core/session');
 	}
 	
 	public function getCustomer()
 	{
-		return $this->getSession()->getCustomer();
+		return MAge::getSingleton('customer/session')->getCustomer();
 	}
 	
 	public function resetConnectedProviders()

@@ -65,6 +65,14 @@
 					</react_remove_user>
 				</observers>	
 			</customer_login>
+			<controller_action_predispatch_wishlist_index_add>
+				<observers>
+					<react_wishlist_login>
+						<class>React_React_Model_Observer</class>
+						<method>wishlistLoginRedirect</method>
+					</react_wishlist_login>	
+				</observers>
+			</controller_action_predispatch_wishlist_index_add>
 		</events>
 	</global>
 	<default>

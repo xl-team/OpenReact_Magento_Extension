@@ -4,6 +4,8 @@ class React_React_Helper_Process extends Mage_Core_Helper_Abstract
 	const NO_EMAIL_VARIABLE = 'react_no_email';
 	const SHARE_VARIABLE = 'react_share_info';
 	const REDIRECT = 'react_redirect';
+	const SESSION_REDIRECT = 'react_session_redirect';
+	const WISHLIST_REDIRECT = 'react_wishlist_redirect';
 	
 	public function __construct()
 	{
@@ -37,7 +39,7 @@ class React_React_Helper_Process extends Mage_Core_Helper_Abstract
 			}		
 		}
 		
-		$this->getSession()->setCustomerAsLoggedIn($customer);
+		Mage::getSingleton('customer/session')->setCustomerAsLoggedIn($customer);
 		$this->getSession()->addSuccess($this->__('You have successfully logged in using your %s account.',$result['connectedWithProvider']));
 		
 		if ($this->getSession()->getData(self::SHARE_VARIABLE))
@@ -106,18 +108,26 @@ class React_React_Helper_Process extends Mage_Core_Helper_Abstract
 	
 	protected function getSession()
 	{
-		return Mage::getSingleton('customer/session');
+		return Mage::getSingleton('core/session');
 	}
 	
 	
 	protected function _redirect($redirect = '')
 	{
 		Mage::unregister(self::REDIRECT);
-		Mage::register(self::REDIRECT,(string)$redirect);
+		Mage::register(self::REDIRECT, (string)$redirect);
 	}
 	
 	public function getRedirect()
 	{
-		return Mage::registry(self::REDIRECT);
+		$session_redirect = (string)$this->getSession()->getData(self::SESSION_REDIRECT,true);
+		
+		return (trim($session_redirect)) ? $session_redirect : Mage::registry(self::REDIRECT);
+	}
+	
+	public function setRedirect($target = '')
+	{
+		$redirect = trim(str_replace(Mage::getBaseUrl(), '', $target),'/');
+		$this->getSession()->setData(self::SESSION_REDIRECT, $redirect);
 	}
 }
