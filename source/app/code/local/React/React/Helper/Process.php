@@ -9,7 +9,7 @@ class React_React_Helper_Process extends Mage_Core_Helper_Abstract
 	
 	public function __construct()
 	{
-		Mage::register(self::REDIRECT,'customer/account');
+		Mage::register(self::REDIRECT, 'customer/account');
 	}
 	
 	public function processRequest(array $result)
@@ -24,7 +24,6 @@ class React_React_Helper_Process extends Mage_Core_Helper_Abstract
 		{
 			$customer->setData('website_id', Mage::app()->getStore()->getWebsiteId());
 			$customer->loadByEmail($result['profile']['email']);
-			
 			if ($customer->getId())
 			{
 				#$this->getServices()->updateAccount($customer, $result);
@@ -34,8 +33,8 @@ class React_React_Helper_Process extends Mage_Core_Helper_Abstract
 			else 
 			{
 				$status = $this->_createCustomer($customer, $result);	
-				if(!$status)
-					return false;
+			 	if(!$status)
+					return null;
 			}		
 		}
 		
@@ -91,13 +90,16 @@ class React_React_Helper_Process extends Mage_Core_Helper_Abstract
 		else
 		{
 			$this->_noMail($result);	
-			return true;
+			return false;
 		}
 	}
 	
 	protected function _noMail(array $result = array())
 	{
+		
 		$this->getSession()->setData(self::NO_EMAIL_VARIABLE, $result);
+		#$this->getSession()->save();
+		vd($this->getSession());
 		$this->_redirect('react/index/email');	
 	}
 	

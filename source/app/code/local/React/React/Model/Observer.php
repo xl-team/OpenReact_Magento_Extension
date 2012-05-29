@@ -15,7 +15,7 @@ class React_React_Model_Observer
 	public function wishlistLoginRedirect($event)
 	{	
 		$_helper = Mage::helper('react/process');
-		$redirect = $this->getSession()->getData($_helper::WISHLIST_REDIRECT,true);
+		$redirect = $this->getSession()->getData($_helper::WISHLIST_REDIRECT, true);
 		if(Mage::helper('customer')->isLoggedIn() && is_array($redirect))
 		{
 			Mage::getSingleton('customer/session')->setBeforeWishlistUrl(Mage::getUrl($redirect['final']));		

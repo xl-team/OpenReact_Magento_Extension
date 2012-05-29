@@ -26,7 +26,7 @@ class React_React_ProvidersController extends Mage_Core_Controller_Front_Action 
 	{
 		$this->_redirect('react/providers');
 		
-		if (Mage::helper('customer')->isLoggedIn())	
+		if (!Mage::helper('customer')->isLoggedIn())	
 			return;
 		
 		$_helper = Mage::helper('react/process');
@@ -63,6 +63,6 @@ class React_React_ProvidersController extends Mage_Core_Controller_Front_Action 
 
 	public function getCustomer()
 	{
-		return Mage::getSingleton('core/session')->getCustomer();
+		return Mage::getSingleton('customer/session')->getCustomer();
 	}
 }
