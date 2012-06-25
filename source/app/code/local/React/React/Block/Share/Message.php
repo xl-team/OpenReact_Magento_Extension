@@ -10,16 +10,20 @@ class React_React_Block_Share_Message extends Mage_Core_Block_Template
 	{
 		if ($this->getSession()->isLoggedIn())
 			return '';
-		
-		$login_block = $this->getLayout()->createBlock('react/login','react_login',array(
-			'title' => $this->__('Please login before sharing.'),
-			'description' => '',
-			'show_button' => false,
-			'heading_tag' => 'h2',
-		));
-		
+
+		$login_block = $this->getLayout()->createBlock(
+			'react/login',
+			'react_login',
+			array(
+				'title' => $this->__('Please login before sharing.'),
+				'description' => '',
+				'show_button' => false,
+				'heading_tag' => 'h2',
+			)
+		);
+
 		return $login_block->toHtml();
-	}		
+	}
 
 	public function getFormAction()
 	{

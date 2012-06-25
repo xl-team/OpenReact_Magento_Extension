@@ -1,5 +1,4 @@
 <?php
-
 class React_React_Helper_Client_Services extends React_React_Helper_Client
 {
 	/** (array) Default service the client will connect to (method name prefix) */
@@ -8,9 +7,7 @@ class React_React_Helper_Client_Services extends React_React_Helper_Client
 	protected $_serviceClients = array();
 	/** (array) Authentication by prepending parameters */
 	protected $_prependAuthentication = array();
-    
-    
-        
+
 
 	/**
 		Parameters:
@@ -18,11 +15,9 @@ class React_React_Helper_Client_Services extends React_React_Helper_Client
 			defaultService - (string|null) Service to use for this client, if NULL is passed, sevices can be accessed as properties on this instance.
 			prependAuthentication - (array) Authentication parameters to prepend to RPC calls
 	*/
-	
-    public function __construct(array $endpoints = array(), $defaultService = null, $prependAuthentication = array())
+	public function __construct(array $endpoints = array(), $defaultService = null, $prependAuthentication = array())
 	{
-		
-        $this->_prependAuthentication = $prependAuthentication;
+		$this->_prependAuthentication = $prependAuthentication;
 
 		$this->_defaultService = $defaultService;
 
@@ -50,14 +45,14 @@ class React_React_Helper_Client_Services extends React_React_Helper_Client
 	}
 
 	/**
-	 	Execute an XML-RPC call to the endpoint.
+		Execute an XML-RPC call to the endpoint.
 
-	 	Parameters:
-	 		methodName - (string) name of the XML-RPC method to call
-	 		parameters - (array) parameters for the call
+		Parameters:
+			methodName - (string) name of the XML-RPC method to call
+			parameters - (array) parameters for the call
 
-	 	Returns:
-	 		(mixed) The return value
+		Returns:
+			(mixed) The return value
 	*/
 	public function __call($methodName, array $parameters = array())
 	{
@@ -71,7 +66,6 @@ class React_React_Helper_Client_Services extends React_React_Helper_Client
 
 		return parent::__call($methodName, $parameters);
 	}
-
 
 	/**
 		Set all current available services, and map all services contained within.
@@ -97,8 +91,8 @@ class React_React_Helper_Client_Services extends React_React_Helper_Client
 		(Will add prepend authentication if needed)
 
 		Parameters:
-	 		methodName - (string) name of the XML-RPC method to call
-	 		parameters - (array) parameters for the call
+			methodName - (string) name of the XML-RPC method to call
+			parameters - (array) parameters for the call
 
 		Returns:
 			(string) HTTP header + body
@@ -108,7 +102,7 @@ class React_React_Helper_Client_Services extends React_React_Helper_Client
 		if ($this->_defaultService != 'System' && $this->_prependAuthentication)
 			$parameters = array_merge($this->_prependAuthentication, $parameters);
 
-		$method = (isset($this->_defaultService) ? $this->_defaultService .'.' : '') . $method;
+		$method = (isset($this->_defaultService) ? $this->_defaultService . '.' : '') . $method;
 
 		return parent::_buildRequest($method, $parameters);
 	}
@@ -169,5 +163,4 @@ class React_React_Helper_Client_Services extends React_React_Helper_Client
 	{
 		return isset($this->_serviceClients[$serviceName]);
 	}
-    
 }

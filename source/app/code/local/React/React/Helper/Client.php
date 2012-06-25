@@ -1,10 +1,10 @@
 ﻿<?php
-/**
+/*
 	OpenReact
 
-  	LICENSE:
-  	This source file is subject to the Simplified BSD license that is
-  	bundled	with this package in the file LICENSE.txt.
+	LICENSE:
+	This source file is subject to the Simplified BSD license that is
+	bundled	with this package in the file LICENSE.txt.
 	It is also available through the world-wide-web at this URL:
 	http://account.react.com/license/simplified-bsd
 	If you did not receive a copy of the license and are unable to
@@ -16,15 +16,17 @@
 /**
 	PHP based XML-RPC client. Currently only supports UTF-8 as character encoding.
 */
-class React_React_Helper_Client extends Mage_Core_Helper_Abstract 
+class React_React_Helper_Client extends Mage_Core_Helper_Abstract
 {
 	/** (string) Version number of the client, will be communicated as client-server to the XML-RPC server */
 	const VERSION = '1.0';
 	/** (string) Character enconding used */
 	const ENCODING = 'UTF-8';
 
+
 	/** (string) Endpoint URL of the XML-RPC service */
 	protected $_endpoint;
+
 
 	/**
 		Construct the XML-RPC client.
@@ -38,14 +40,14 @@ class React_React_Helper_Client extends Mage_Core_Helper_Abstract
 	}
 
 	/**
-	 	Execute an XML-RPC call to the endpoint.
+		Execute an XML-RPC call to the endpoint.
 
-	 	Parameters:
-	 		methodName - (string) name of the XML-RPC method to call
-	 		parameters - (array) parameters for the call
+		Parameters:
+			methodName - (string) name of the XML-RPC method to call
+			parameters - (array) parameters for the call
 
-	 	Returns:
-	 		(mixed) The return value
+		Returns:
+			(mixed) The return value
 	*/
 	public function call($methodName, array $parameters = array())
 	{
@@ -53,14 +55,14 @@ class React_React_Helper_Client extends Mage_Core_Helper_Abstract
 	}
 
 	/**
-	 	Magic PHP method for catching method calls. Execute an XML-RPC call to the endpoint.
+		Magic PHP method for catching method calls. Execute an XML-RPC call to the endpoint.
 
-	 	Parameters:
-	 		methodName - (string) name of the XML-RPC method to call
-	 		parameters - (array) parameters for the call
+		Parameters:
+			methodName - (string) name of the XML-RPC method to call
+			parameters - (array) parameters for the call
 
-	 	Returns:
-	 		(mixed) The return value
+		Returns:
+			(mixed) The return value
 	*/
 	public function __call($methodName, array $parameters = array())
 	{
@@ -104,8 +106,8 @@ class React_React_Helper_Client extends Mage_Core_Helper_Abstract
 		Build an XML-RPC HTTP request for an XML-RPC call.
 
 		Parameters:
-	 		methodName - (string) name of the XML-RPC method to call
-	 		parameters - (array) parameters for the call
+			methodName - (string) name of the XML-RPC method to call
+			parameters - (array) parameters for the call
 
 		Returns:
 			(string) HTTP header + body
@@ -115,7 +117,7 @@ class React_React_Helper_Client extends Mage_Core_Helper_Abstract
 		if (!preg_match('~^[a-z0-9_.:/]+$~i', $methodName))
 			throw new React_React_Exception('The method name `%s` contains invalid characters.', array($methodName));
 
-		$methodCall = new SimpleXmlElement('<?xml version="1.0" encoding="'. self::ENCODING .'"?><methodCall></methodCall>');
+		$methodCall = new SimpleXmlElement('<?xml version="1.0" encoding="' . self::ENCODING . '"?><methodCall></methodCall>');
 		$methodCall->addChild('methodName', $methodName);
 		$methodCall->addChild('params');
 
@@ -130,13 +132,13 @@ class React_React_Helper_Client extends Mage_Core_Helper_Abstract
 		$body = $methodCall->asXml();
 
 		$headers = array(
-			'Host' 				=> $endpoint['host'],
-			'User-Agent'		=> 'OpenReact/XmlRpcClient ' . self::VERSION,
-			'Content-Type'		=> 'text/xml;chartype='. self::ENCODING,
-			'Content-Length' 	=> strlen($body),
+			'Host' => $endpoint['host'],
+			'User-Agent' => 'OpenReact/XmlRpcClient ' . self::VERSION,
+			'Content-Type' => 'text/xml;chartype=' . self::ENCODING,
+			'Content-Length' => strlen($body),
 		);
 
-		$request = 'POST ' . $endpoint['path'] . ' HTTP/1.0' ."\r\n";
+		$request = 'POST ' . $endpoint['path'] . ' HTTP/1.0' . "\r\n";
 
 		foreach ($headers as $name => $value)
 			$request .= sprintf("%s: %s\r\n", $name, $value);
@@ -150,7 +152,7 @@ class React_React_Helper_Client extends Mage_Core_Helper_Abstract
 		Send an HTTP request.
 
 		Parameters:
-	 		request - (string) HTTP request
+			request - (string) HTTP request
 
 		Returns:
 			(string) HTTP response
@@ -172,7 +174,7 @@ class React_React_Helper_Client extends Mage_Core_Helper_Abstract
 		$response = '';
 		while (!feof($fp))
 			$response .= fgets($fp, 8192);
-        
+
 		return $response;
 	}
 
@@ -181,15 +183,13 @@ class React_React_Helper_Client extends Mage_Core_Helper_Abstract
 		Will thrown exceptions if the HTTP response is an invalid XML-RPC response, or if it contains an XML-RPC fault result.
 
 		Parameters:
-	 		response - (string) HTTP response
+			response - (string) HTTP response
 
 		Returns:
 			(mixed) The result value of the XML-RCP response
 	*/
 	protected function _processResponse($response)
 	{
-  	  
-     
 		list($headers, $body) = $this->_splitHttpResponse($response);
 
 		if (!isset($headers['Content-Type']) || 0 !== strpos($headers['Content-Type'], 'text/xml'))
@@ -216,7 +216,7 @@ class React_React_Helper_Client extends Mage_Core_Helper_Abstract
 
 		if (!isset($responseXml->params, $responseXml->params->param, $responseXml->params->param[0], $responseXml->params->param[0]->value))
 			throw new React_React_Exception('XML malformed, missing XML-RPC return value.');
-        
+
 		return $this->_decodeParam($responseXml->params->param[0]->value);
 	}
 
@@ -255,7 +255,7 @@ class React_React_Helper_Client extends Mage_Core_Helper_Abstract
 
 		$valueType = gettype($value);
 
-		switch(gettype($value))
+		switch (gettype($value))
 		{
 			case 'array':
 				if ($this->_isSimpleArray($value))
@@ -302,14 +302,16 @@ class React_React_Helper_Client extends Mage_Core_Helper_Abstract
 						"
 					*/
 
-					if (preg_match(
-						'/[\x00-\x08\x10\x0B\x0C\x0E-\x19\x7F]' . // Invalid characters below codepoint 127
-						'|[\x00-\x7F][\x80-\xBF]+' . // ASCII char (< 127) followed by multibyte sequence(s)
-						'|([\xC0\xC1]|[\xF0-\xFF])[\x80-\xBF]*' . // Overly long 2 byte sequence start, or 4+byte sequence start, or FE/FF illegal chars, optionally followed by one or more multibyte seq. characters
-						'|[\xC2-\xDF]((?![\x80-\xBF])|[\x80-\xBF]{2,})' . // Two byte sequence starter not followed by a non-multibyte seq, or more then 1 multibyte seq
-						'|[\xE0-\xEF](([\x80-\xBF](?![\x80-\xBF]))|(?![\x80-\xBF]{2})|[\x80-\xBF]{3,})/S', // Three byte sequence starter not followed by a non-multibyte seq, or more then 2 multibyte seq
-						$value
-					))
+					if (
+						preg_match(
+							'/[\x00-\x08\x10\x0B\x0C\x0E-\x19\x7F]' . // Invalid characters below codepoint 127
+							'|[\x00-\x7F][\x80-\xBF]+' . // ASCII char (< 127) followed by multibyte sequence(s)
+							'|([\xC0\xC1]|[\xF0-\xFF])[\x80-\xBF]*' . // Overly long 2 byte sequence start, or 4+byte sequence start, or FE/FF illegal chars, optionally followed by one or more multibyte seq. characters
+							'|[\xC2-\xDF]((?![\x80-\xBF])|[\x80-\xBF]{2,})' . // Two byte sequence starter not followed by a non-multibyte seq, or more then 1 multibyte seq
+							'|[\xE0-\xEF](([\x80-\xBF](?![\x80-\xBF]))|(?![\x80-\xBF]{2})|[\x80-\xBF]{3,})/S', // Three byte sequence starter not followed by a non-multibyte seq, or more then 2 multibyte seq
+							$value
+						)
+					)
 					{
 						throw new React_React_Exception('Parameter is not valid UTF-8.');
 					}
@@ -345,7 +347,7 @@ class React_React_Helper_Client extends Mage_Core_Helper_Abstract
 	{
 		$children = $param->children();
 		$child = $children[0];
-        
+
 		switch ($child->getName())
 		{
 			case 'struct':
@@ -358,8 +360,7 @@ class React_React_Helper_Client extends Mage_Core_Helper_Abstract
 				$values = array();
 				foreach ($child->data->value as $value)
 					$values[] = $this->_decodeParam($value);
-                
-                
+
 				return $values;
 			case 'nil':
 				return null;

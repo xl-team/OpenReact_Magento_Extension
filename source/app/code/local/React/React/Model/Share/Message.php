@@ -10,28 +10,27 @@ class React_React_Model_Share_Message extends Varien_Object
 			'url' => '',
 			'img' => '',
 			'title' => '',
-			'description' => '', 
+			'description' => '',
 		);
-		
-		$this->addData($data);	
+
+		$this->addData($data);
 	}
 
 	public function init(array $args = array())
 	{
 		if (is_array($args))
-			$data = array_intersect_key($args,$this->getData());	
-			
+			$data = array_intersect_key($args, $this->getData());
+
 		if (empty($data['application_user_id']))
 			$data['application_user_id'] = $this->getCustomer()->getId();
-		
+
 		$this->addData($data);
-		
+
 		return $this;
 	}
-	
+
 	public function getCustomer()
 	{
 		return Mage::getSingleton('customer/session')->getCustomer();
 	}
-	
 }

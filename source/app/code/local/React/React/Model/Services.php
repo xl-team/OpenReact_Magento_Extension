@@ -1,25 +1,26 @@
 <?php
-
 class React_React_Model_Services extends Varien_Object
 {
 	const PROVIDERS_LIMIT = 1;
 	const SESSION_VARIABLE = 'react_connected_providers';
 	const CACHE_VARIABLE = 'react_provider_list';
+
+
 	protected $_eventPrefix = 'react_services';
 	protected $_eventObject = 'react_services';
 	protected $_canRemoveProvider = null;
 	protected $_redirectUrl;
 	protected $_connectedProviders;
-	
+
+
 	public function __construct()
 	{
 		parent::__construct();
 		$this->setClient(Mage::helper('react/client_magentoservices'));
-		$redirect_url = 'react/'.Mage::app()->getRequest()->getControllerName().'/process';
+		$redirect_url = 'react/' . Mage::app()->getRequest()->getControllerName() . '/process';
 		$this->_redirectUrl = Mage::getUrl($redirect_url);
-		
-		$this->_connectedProviders = $this->getSession()->getData(self::SESSION_VARIABLE);	
-		
+
+		$this->_connectedProviders = $this->getSession()->getData(self::SESSION_VARIABLE);
 	}
 
 	public function getProviders()
@@ -76,50 +77,49 @@ class React_React_Model_Services extends Varien_Object
 		return $connected['connectedWithProviders'];
 	}
 
-	public function getConnectedAccounts($customer_id = false) 
+	public function getConnectedAccounts($customer_id = false)
 	{
- 		if(is_null($this->_connectedProviders))
- 		{
+		if (is_null($this->_connectedProviders))
+		{
 			$this->_connectedProviders = array_intersect($this->getProviders(), $this->userGetProviders($customer_id));
 			$this->getSession()->addData('react_connected_providers', $this->_connectedProviders);
 		}
-		
+
 		$this->_canRemoveProvider = count($this->_connectedProviders) > self::PROVIDERS_LIMIT;
-					
+
 		return $this->_connectedProviders;
 	}
-	
+
 	public function canRemoveProvider()
 	{
-		if(is_null($this->_canRemoveProvider))
-			$this->getConnectedAccounts();	
-	
+		if (is_null($this->_canRemoveProvider))
+			$this->getConnectedAccounts();
+
 		return $this->_canRemoveProvider;
 	}
-	
+
 	public function getSession()
 	{
 		return Mage::getSingleton('core/session');
 	}
-	
+
 	public function getCustomer()
 	{
 		return MAge::getSingleton('customer/session')->getCustomer();
 	}
-	
+
 	public function resetConnectedProviders()
 	{
 		$this->_connectedProviders = null;
-		$this->getSession()->unsetData(self::SESSION_VARIABLE);	
+		$this->getSession()->unsetData(self::SESSION_VARIABLE);
 	}
-	
+
 	public function isConnected(Mage_Customer_Model_Customer $customer, $provider = null)
-	{	
-		
-		if(is_null($provider))
+	{
+		if (is_null($provider))
 			return (bool)count($this->getConnectedAccounts());
-		
+
 		$connected = array_flip($this->getConnectedAccounts());
 		return isset($connected[$provider]);
-	}	
+	}
 }
