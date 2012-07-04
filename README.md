@@ -19,3 +19,4 @@ Once the plugin is properly installed, it needs to be configured with an React.c
 2. Add API keys from at least one social network to your account. The wizard will guide you through this.
 3. Save the React.com application key and secret.
 4. Open the Magento admin and configure the React.com application key and secret (System / Configuration / React)
+5. After adding a new provider, please flush magento cache. 

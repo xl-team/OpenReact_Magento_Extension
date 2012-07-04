@@ -38,6 +38,13 @@
 				<class>React_React_Model</class>
 			</react>
 		</models>
+		<resources>
+            <react_setup>
+                <setup>
+                    <module>React_React</module>
+                </setup>
+            </react_setup>
+        </resources>
 		<blocks>
 			<react>
 				<class>React_React_Block</class>

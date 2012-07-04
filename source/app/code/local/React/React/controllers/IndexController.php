@@ -1,91 +1,100 @@
 <?php
 class React_React_IndexController extends Mage_Core_Controller_Front_Action
 {
-	const NO_EMAIL_VARIABLE = 'react_no_email';
-
-
+	/**
+		There is no index action.
+	*/
 	public function indexAction()
 	{
-		$this->_redirect('customer/account');
+		$this->_redirectReferer();
 	}
-
+	
+	/**
+ 		Start the login process
+ 	*/
 	public function loginAction()
 	{
-		$this->_redirect('customer/account');
-
-		if (Mage::helper('customer')->isLoggedIn())
-			return;
-
-		$provider = $this->getRequest()->getParam('provider');
-
-		$redirect_checkout = $this->getRequest()->getParam('checkout');
-		$result = Mage::getModel('react/services')->tokenRequest($provider);
-
-		$this->getSession()->setData('react_checkout', $redirect_checkout);
-
-		if (isset($result['redirectUrl']))
-			$this->_redirectUrl($result['redirectUrl']);
-	}
-
-	public function processAction()
-	{
-		$_helper = Mage::helper('react/process');
-
-		if (Mage::helper('customer')->isLoggedIn())
-			return;
-
-		$result = $_helper->getServices()->tokenAccess($this->getRequest()->getParams());
-		$status = $_helper->processRequest($result);
-
-		$this->_redirect($_helper->getRedirect());
-
-		if (is_bool($status) && !$status)
-			$this->getSession()->addError($this->__('We are sorry you can not connect using %s.', $result['connectedWithProvider']));
-	}
-
-	public function emailAction()
-	{
-		$_helper = Mage::helper('react/process');
-
-		if (!$this->getSession()->getData($_helper::NO_EMAIL_VARIABLE))
+		$_helper = Mage::helper('react');
+		$response = Mage::getModel('react/ajax_response');
+		$response->setUrl($this->_getRefererUrl());
+		if (!$_helper->isLoggedIn())
 		{
-			$this->_redirect('customer/account');
-			return;
+						$provider = $this->getRequest()->getParam('provider');
+			$result = $_helper->login($provider, $this->_getRefererUrl());
+			if (isset($result['redirectUrl']));
+				$response->setUrl($result['redirectUrl']);
 		}
-
-		$this->loadLayout();
-		$this->_initLayoutMessages('customer/session');
-		$this->_initLayoutMessages('catalog/session');
-
-		$this->renderLayout();
+		$response->sendResponse($this->getResponse());
 	}
-
+	/**
+		Processes the information after the tokenRequest method
+ 	*/
+ 	public function processAction()
+ 	{
+		$_helper = Mage::helper('react/oauth');
+		if ($_helper->isLoggedIn())
+		{
+			$status = $_helper->addNewProvider();	
+			$this->_redirect('react/providers');
+		}
+		else 
+		{
+			$status = $_helper->processLoginRequest();
+			if ($status === false)
+				$_helper->getSession()->addError($this->__('We are sorry you can not connect using %s.', $result['connectedWithProvider']));	
+			else
+				$this->_redirectUrl($_helper->getSessionRedirect());
+		}
+	 }
+	 	
+	/**
+ 		Form processing for the "no email" page  
+ 	*/
 	public function emailPostAction()
 	{
-		$this->_redirect('customer/account');
-
-		$_helper = Mage::helper('react/process');
-		$result = $this->getSession()->getData($_helper::NO_EMAIL_VARIABLE, true);
+	
+		$_helper = Mage::helper('react/oauth');
+		$response = Mage::getModel('react/ajax_response');
+		
+		$result = $_helper->getSession()->getData($_helper::VAR_NOEMAIL, true);
 		if (!$result)
 			return;
-
 		$result['profile']['email'] = $this->getRequest()->getParam('email');
-		$status = $_helper->processRequest($result);
+		$status = $_helper->processLoginRequest($result);
 		if (!$status)
 		{
-			$this->getSession()->addError($this->__('We are sorry you can not connect using %s.', $result['connectedWithProvider']));
-			$this->getSession()->unsetData($_helper::NO_EMAIL_VARIABLE);
-			return;
+			$response->addMessage($this->__('We are sorry you can not connect using %s.', $result['connectedWithProvider']));
 		}
-		else if ($this->getSession()->getData($_helper::SHARE_VARIABLE))
+		else if (is_string($status))
+		{
+			$response->addMessage($status);		
+		}
+		/*else if ($_helper->getSession()->getData($_helper::SHARE_VARIABLE))
 		{
 			$this->_redirect('react/share');
+		}*/
+		else 
+		{
+			$response->setUrl(true);
 		}
+		$response->sendResponse($this->getResponse());
 	}
-
-	public function getSession()
+	/**
+		Retrives the email form for ajax requests
+	*/
+	public function emailFormAction()
 	{
-		return Mage::getSingleton('core/session');
+		$response = Mage::getModel('react/ajax_response');
+		$block = $this->getLayout()->createBlock('react/customer_email');
+		$response->setHtml($block->toHtml());
+		$response->sendResponse($this->getResponse());
 	}
+	
+	/**
+		Clears the session variables
+ 	*/
+	public function clearAction()
+	{
+		Mage::helper('react')->clearSession();
+	} 
 }
-?>

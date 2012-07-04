@@ -1,17 +1,14 @@
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-<div class="page-title">
-	<h1><?php echo $this->__('Please add a message:') ?></h1>
-</div>
-<form method="post" action="<?php echo $this->getFormAction() ?>">
+<div class="fieldset">
+	<h3 class="legend"><?php echo $this->__('Please add a message:') ?></h3>
 	<ul class="form-list">
 		<li>
-			<textarea name="message"></textarea>	
+			<textarea id="react_message"></textarea>	
 		</li>
 	</ul>
-	<?php echo $this->getLoginForm(); ?>
-	<div class="button-container">
-		<button class="button">
+	<div class="button-container" style="text-align: right;">
+		<a href="javascript:reactBox.clearSession()"><?php echo $this->__('Cancel') ?></a>
+		<button type="button" onclick="reactBox.postMessage()" class="button">
 			<span><span><?php echo $this->__('Post Message') ?></span></span>
 		</button>
 	</div>
-</form>
+</div>

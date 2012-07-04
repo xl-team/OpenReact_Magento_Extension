@@ -1,10 +1,13 @@
 <?php
 class React_React_Model_Share extends Varien_Object
 {
+	/**
+		Internal Magento constructor
+	*/
 	public function _construct()
 	{
 		$data = array(
-			'client' => Mage::helper('react/client_magentoservices'),
+			'client' => Mage::helper('react/client'),
 			'defaults' => null,
 		);
 
@@ -59,7 +62,7 @@ class React_React_Model_Share extends Varien_Object
 					$defaults->setTitle($_category->getName());
 					$defaults->setDescription(nl2br(strip_tags($_category->getDescription())));
 
-					$img = $this->getCategoryThumbnail($_category);
+					$img = $this->_getCategoryThumbnail($_category);
 					if ($img)
 						$img = $_category->getImageUrl();
 					$defaults->setImg($img);
@@ -69,14 +72,14 @@ class React_React_Model_Share extends Varien_Object
 
 					$defaults->setUrl(Mage::helper('cms/page')->getPageUrl($_page->getId()));
 					$defaults->setTitle($_page->getTitle());
-					$defaults->setDescription($this->getExcerpt($_page));
-					$defaults->setImg($this->getDefaultImage());
+					$defaults->setDescription($this->_getExcerpt($_page));
+					$defaults->setImg($this->_getDefaultImage());
 					break;
 				default:
 					$defaults->setUrl(Mage::helper('core/url')->getCurrentUrl());
-					$defaults->setTitle($this->getDefaultTitle());
-					$defaults->setDescription($this->getDefaultDescription());
-					$defaults->setImg($this->getDefaultImage());
+					$defaults->setTitle($this->_getDefaultTitle());
+					$defaults->setDescription($this->_getDefaultDescription());
+					$defaults->setImg($this->_getDefaultImage());
 					break;
 			}
 			$this->setDefaults($defaults);
@@ -84,7 +87,7 @@ class React_React_Model_Share extends Varien_Object
 		return $defaults;
 	}
 
-	protected function getExcerpt(Mage_Cms_Model_Page $page)
+	protected function _getExcerpt(Mage_Cms_Model_Page $page)
 	{
 		$content = strip_tags($page->getContent());
 		$content_line = explode("\n", $content);
@@ -100,11 +103,10 @@ class React_React_Model_Share extends Varien_Object
 			else
 				return $line;
 		}
-
 		return '';
 	}
 
-	protected function getCategoryThumbnail(Mage_Catalog_Model_Category $category)
+	protected function _getCategoryThumbnail(Mage_Catalog_Model_Category $category)
 	{
 		$url = false;
 		if ($thumbnail = $category->getThumbnail())
@@ -114,17 +116,17 @@ class React_React_Model_Share extends Varien_Object
 		return $url;
 	}
 
-	protected function getDefaultTitle()
+	protected function _getDefaultTitle()
 	{
 		return htmlspecialchars(html_entity_decode(trim(Mage::getStoreConfig('design/head/default_title')), ENT_QUOTES, 'UTF-8'));
 	}
 
-	protected function getDefaultDescription()
+	protected function _getDefaultDescription()
 	{
 		return Mage::getStoreConfig('design/head/default_description');
 	}
 
-	protected function getDefaultImage()
+	protected function _getDefaultImage()
 	{
 		return Mage::getDesign()->getSkinUrl(Mage::getStoreConfig('design/header/logo_src'));
 	}

@@ -1,22 +1,22 @@
 <?php
 class React_React_Model_Observer
 {
-	const NO_EMAIL_VARIABLE = 'react_no_email';
-
-
+	/**
+ 		Function called when a customer is deleted from the database.	
+ 	*/
 	public function userRemoveProvider($event)
 	{
-		$service = Mage::getSingleton('react/services');
-		$customer_id = $event->getCustomer()->getId();
+		$_helper = Mage::helper('react/oauth');
+		$customer = $event->getCustomer();
 
-		foreach ($service->getConnectedAccounts($customer_id) as $provider)
-			$service->userRemoveProvider($customer_id, $provider, true);
+		foreach ($_helper->getConnectedAccounts($customer) as $provider)
+			$_helper->userRemoveProvider($customer, $provider, true);
 	}
 
 	public function wishlistLoginRedirect($event)
 	{
 		$_helper = Mage::helper('react/process');
-		$redirect = $this->getSession()->getData($_helper::WISHLIST_REDIRECT, true);
+		$redirect = $_helper->getSession()->getData($_helper::WISHLIST_REDIRECT, true);
 		if (Mage::helper('customer')->isLoggedIn() && is_array($redirect))
 		{
 			Mage::getSingleton('customer/session')->setBeforeWishlistUrl(Mage::getUrl($redirect['final']));
@@ -36,12 +36,8 @@ class React_React_Model_Observer
 
 	public function renewSession()
 	{
-		$this->getSession()->unsetData(self::NO_EMAIL_VARIABLE);
-	}
-
-	protected function getSession()
-	{
-		return Mage::getSingleton('core/session');
+		$_helper = Mage::helper('react');
+		$_helper->getSession()->unsetData($_helper::VAR_NOEMAIL);
 	}
 }
 ?>
