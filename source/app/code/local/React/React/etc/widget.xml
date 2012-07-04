@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<widgets>
+	<react_share type="react/widget_share" translate="name" module="react">
+		<name>Share button (React.com)</name>
+        <is_email_compatible>0</is_email_compatible>
+        <parameters>
+            <title translate="label description">
+                <visible>1</visible>
+                <label>Title</label>
+                <description>If empty, the Page Title will be used</description>
+                <type>text</type>
+            </title>
+            <!--<img translate="label description">
+                <visible>1</visible>
+                <label>Image</label>
+                <description>If empty, the website logo will be used</description>
+                <type>image</type>
+            </img>-->
+            <description translate="label description">
+                <visible>1</visible>
+                <label>Description</label>
+                <description>If empty, the webiste description will be used</description>
+                <type>text</type>
+            </description>
+            <force>
+				<visible>1</visible>
+                <label>Allways display</label>
+                <description>If checked, it will display the share button even if there is another button present on the page</description>
+                <type>checkbox</type>	
+				<type>select</type>
+				<values>
+					<no translate="label">
+                        <value>0</value>
+                        <label>No</label>
+                    </no>
+                    <yes translate="label">
+						<value>1</value>
+						<label>Yes</label>
+					</yes>
+				</values>
+			</force>
+		</parameters>
+	</react_share>
+</widgets>

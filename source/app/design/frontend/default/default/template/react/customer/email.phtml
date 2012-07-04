@@ -1,0 +1,29 @@
+<?php $_helper = Mage::helper('react') ?>
+<form id="react-email" action="<?php echo $this->getUrl('react/index/emailPost') ?>" method="post">
+	<div class="fieldset">
+		<h2 class="legend"><?php echo $this->__('Account Email') ?></h2>
+		<div class="content">
+			<p><?php echo $this->__('The email address provided by %s could not be verfied. Please enter your email in order to continue with the registration process.', $this->getProvider()) ?></p>
+			<ul class="form-list">
+				<li>
+					<label class="required">
+						<em>*</em>
+						<?php echo $this->__('Email Address') ?>
+					</label>
+					<div class="input-box"><input class="input-text required-entry validate-email" type="text" name="email" title="Email Address" id="react_email" /></div>
+				</li>
+			</ul>
+		</div>
+		<div class="buttons-set">
+			<button onclick="reactBox.saveEmail()" type="button" class="button">
+				<span><span><?php echo $this->__('Save') ?></span></span>
+			</button>&nbsp; 
+			<a href="javascript:reactBox.clearSession()"><?php echo $this->__('Cancel') ?></a>
+		</div>
+	</div>
+</form>
+	
+
+<script type="text/javascript">
+	var dataForm = new VarienForm('react-email', true);
+</script>

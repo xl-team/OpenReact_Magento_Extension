@@ -1,0 +1,35 @@
+<?php  
+$_providers = $this->getProviders();
+$_heading = $this->getHeadingTag();
+$_helper =  Mage::helper('react');
+?>
+<div class="<?php echo $this->getCssClass() ?> react-login">
+	<?php if($this->isAjax()): ?>
+		<div id="react_box_loader"></div>
+	<?php endif; ?>
+	<<?php echo $_heading ?> class="legend"><?php echo $this->getTitle(); ?></<?php echo $_heading ?>>
+	<p><?php echo $this->getDescription() ?></p>
+	<p><?php echo $this->__('Select your network:') ?></p>
+	<div class="links">
+	<?php foreach($_providers as $provider): ?>
+		<label for="sign-<?php echo $provider ?>" class="provider" title="<?php echo $provider ?>">
+			<span class="image <?php echo strtolower($provider) ?>"></span><br /><br />
+			<input id="sign-<?php echo $provider ?>" type="radio" name="social_network" value="<?php echo $provider ?>" /><span><?php echo $provider ?></span><br />
+		</label>
+	<?php endforeach; ?>
+	</div>
+	<?php if ($this->showButton()): ?>
+	<div class="button-container">
+		<?php if ($this->isAjax()): ?>
+			<a href="javascript:reactBox.clearSession()"><?php echo $this->__('Cancel') ?></a>
+		<?php endif; ?>
+		<button onclick="reactBox.authenticate()" class="button">
+			<span><span>
+			<?php echo $this->__('Authenticate') ?>
+			</span></span>
+		</button>
+ 	</div>
+	<?php endif; ?>
+	
+</div>
+<div style="clear:both"></div>

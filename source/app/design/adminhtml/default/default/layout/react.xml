@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout version="0.1.0">
+	 <adminhtml_customer_edit>
+	 	<reference name="customer_edit_tabs">
+			<action method="addTab"><name>react_customer_tab</name><block>react/adminhtml_customer_edit_tab_react</block></action> 
+		</reference>
+	 </adminhtml_customer_edit>
+</layout>

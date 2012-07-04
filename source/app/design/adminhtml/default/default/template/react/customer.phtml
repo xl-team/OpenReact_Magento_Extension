@@ -1,0 +1,28 @@
+<?php if($providers = $this->getProviders()): ?>
+<?php foreach ($this->getProviders() as $provider => $info): ?>
+<div class="entry-edit" id="react">
+	<div class="entry-edit-head"><h4 class="icon-head head-edit-form fieldset-legend"><?php echo $provider ?></h4></div>
+	<fieldset>
+	<?php if(is_array($info)): $count = 1;?>
+		<table><tbody>
+			<?php foreach($info as $label => $value): ?>
+				<?php if($count%2) echo '<tr>' ?>
+					<td><strong><?php echo ucwords(str_replace(array('_'),array(' ') ,$label)) ?></strong></td>
+					<td><?php echo (trim($value) === '') ? $this->__('Not available') : $value ?></td>
+				<?php if(!$count%2) echo '</tr>' ?>
+			<?php $count++; endforeach; ?>
+		</tbody></table>
+	<?php else: ?>
+		<?php echo $info ?>
+	<?php endif; ?>
+	</fieldset>
+</div>
+<?php endforeach; ?>
+<style>
+#react table td {padding:3px 25px 3px 0px}
+</style>
+<?php else: ?>
+<div class="entry-edit" id="react">
+	<div class="entry-edit-head"><h4 class="icon-head head-edit-form fieldset-legend"><?php echo $this->__('Social Accounts') ?></h4></div>
+	<fieldset><?php echo $this->__('The user is not connected with any social accounts.') ?></fieldset>
+<?php endif; ?>

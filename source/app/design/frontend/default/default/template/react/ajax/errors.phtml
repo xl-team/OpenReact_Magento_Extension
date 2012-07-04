@@ -1,0 +1,4 @@
+<?php foreach($this->getErrors() as $error): ?>
+<div class="error-msg"><?php echo $error ?></div>
+<?php endforeach; ?>
+<button style="margin: 0;" onclick="javascript:reactBox.clearSession()" class="button"><span><span><?php echo $this->__('Continue') ?></span></span></button>
