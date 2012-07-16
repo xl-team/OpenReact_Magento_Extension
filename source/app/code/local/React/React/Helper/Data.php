@@ -137,6 +137,9 @@ class React_React_Helper_Data extends Mage_Core_Helper_Abstract
 	*/
 	public function isConnected(Mage_Customer_Model_Customer $customer, $provider = null)
 	{
+		if(!$this->isLoggedIn())
+			return false;
+						
 		if (is_null($provider))
 			return (bool)count($this->getConnectedAccounts($customer));
 
@@ -151,7 +154,7 @@ class React_React_Helper_Data extends Mage_Core_Helper_Abstract
 			applicationUserId - (string) Should be the applicationUserId returned by the client
 			
 		Returns: 
-			(string)|(NULL) Customer id | NULL on fail 	 
+			(string) applicationUserId 	 
  	*/
 	public function decodeApplicationUserId($applicationUserId = '')
 	{

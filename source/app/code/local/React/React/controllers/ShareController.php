@@ -11,7 +11,6 @@ class React_React_ShareController extends Mage_Core_Controller_Front_Action
 		$post = $this->getRequest()->getPost();
 		
 		$_helper->getSession()->setData($_helper::VAR_SHARE, $post);
-		
 		if(!$_helper->isConnected($_helper->getCustomer()))
 		{
 			
@@ -26,43 +25,20 @@ class React_React_ShareController extends Mage_Core_Controller_Front_Action
 	 	{
 	 		$this->messageAction();		
 	 	}
-	 	/*
-		$post = $this->getRequest()->getPost();
-		$data = $this->getSession()->getData(self::SHARE_VARIABLE, true);
-		if (!is_array($data))
-			$data = array();
-
-		$data = array_merge($data, $post);
-		if (!$data)
-		{
-			$this->_redirectUrl(Mage::getBaseUrl());
-			return;
-		}
-		else if (empty($data['message']) || !$_helper->canShare())
-		{
-			$this->getSession()->setData(self::SHARE_VARIABLE, $post);
-			$this->_redirect('react/share/message');
-			return;
-		}
-
-		$message = Mage::getModel('react/share_message')->init($data);
-		$status = Mage::getModel('react/share')->postMessage($message);
-
-		if ($status)
-			$this->getSession()->addSuccess($this->__('Page the page was successfully shared.'));
-		else
-			$this->getSession()->addError($this->__('An error has occured while trying trying to share this page.'));
-
-		$this->_redirectUrl($data['url']);
-		*/
 	}
 
 	public function messageAction()
 	{
-		$response = Mage::getModel('react/ajax_response');
-		$block = $this->getLayout()->createBlock('react/share_message');
-		$response->setHtml($block->toHtml());
-		$response->sendResponse($this->getResponse());
+		$_helper = Mage::helper('react/share');
+		if(!$_helper->isConnected($_helper->getCustomer()))
+			$this->indexAction();
+		else
+		{
+			$response = Mage::getModel('react/ajax_response');
+			$block = $this->getLayout()->createBlock('react/share_message');
+			$response->setHtml($block->toHtml());
+			$response->sendResponse($this->getResponse());
+		}
 	}
 
 	public function messagePostAction()

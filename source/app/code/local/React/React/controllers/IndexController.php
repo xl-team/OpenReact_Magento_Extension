@@ -40,10 +40,7 @@ class React_React_IndexController extends Mage_Core_Controller_Front_Action
 		else 
 		{
 			$status = $_helper->processLoginRequest();
-			if ($status === false)
-				$_helper->getSession()->addError($this->__('We are sorry you can not connect using %s.', $result['connectedWithProvider']));	
-			else
-				$this->_redirectUrl($_helper->getSessionRedirect());
+			$this->_redirectUrl($_helper->getSessionRedirect());
 		}
 	 }
 	 	

@@ -48,15 +48,24 @@ class React_React_Helper_Oauth extends React_React_Helper_Data
 		}
 		
 		$session_redirect = $this->getSessionRedirect();
-		Mage::getSingleton('customer/session')->loginById($customer->getId());
+		$login_status = Mage::getSingleton('customer/session')->loginById($customer->getId());
 		$this->setSessionRedirect($session_redirect);
-		$this->getSession()->addSuccess($this->__('You have successfully logged in using your %s account.', $result['connectedWithProvider']));
+		if($login_status)
+		{
+			$this->getSession()->addSuccess($this->__('You have successfully logged in using your %s account.', $result['connectedWithProvider']));
+			return true;
+		}
+		else
+		{
+			$this->getSession()->addError($this->__('An error has occurred while trying to login with your %s account. Please try again later.', $result['connectedWithProvider']));
+			return false;
+		}
 		
 		/** SHARE REDIRECT 
 		if ($this->getSession()->getData(self::SHARE_VARIABLE))
 			$this->_redirect('react/share');
 		*/
-		return true;
+		
 	}
 	
 	/**
@@ -66,10 +75,10 @@ class React_React_Helper_Oauth extends React_React_Helper_Data
 	{
 		$params = $this->_getRequest()->getParams();
 		$result = $this->_client->OAuthServer->tokenAccess($params, false);
-		
+	
 		if(isset($result['applicationUserId']) && $result['applicationUserId'])
 		{
-			$this->getSession()->addError($this->__('There is already an account with this email. Please contact site administrator.'));
+			$this->getSession()->addError($this->__('Your %s profile is already in use with another account. Please logout and login with %s to use that account.', $result['connectedWithProvider'], $result['connectedWithProvider']));
 		}
 		else if (isset($result['reactOAuthSession']) && $this->getCustomer()->getId())
 		{

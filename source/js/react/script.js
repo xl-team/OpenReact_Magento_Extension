@@ -43,7 +43,7 @@ var React = Class.create({
 	
 	postMessage: function(){
 		var message = {message: $('react_message').value};
-		if(message.strip() !== ''){
+		if(message.message.strip() !== ''){
 			this.request(this.postMessageUrl, message);
 		}
 			
@@ -54,7 +54,7 @@ var React = Class.create({
 			$('react_dialogbox').update(html.strip());
 			$('react_dialogbox').setStyle({height: 'auto'});
 			if(this.canDisplay){
-				$('react_dialogbox').style.top = '300px';
+				$('react_dialogbox').style.top = '100px';
 				$('react_dialogbox').style.left = '50%';
 				new Effect.Appear($('react_overlay'), {duration: 0.6, from: 0, to: 1.0});	
 				new Effect.Appear($('react_modalbox'), {duration: 0.6, from: 0, to: 1.0});
@@ -96,13 +96,11 @@ var React = Class.create({
 		{
 			url = url+'/';
 		}
-		console.log(ajax_params);
 		this.showLoader();
 		new Ajax.Request(url+this.modeVar+'/1', {
 			parameters: ajax_params,
 			onSuccess: function(data) {
 			var response = data.responseJSON;
-				console.log(response);
 				if(response.url) {
 					if(typeof(response.url) == 'boolean'){
 						window.location.reload();
@@ -113,6 +111,10 @@ var React = Class.create({
 				}
 				else if (response.html){
 					self.initBox(response.html);	
+					if($$('ul.messages').size())
+					{
+						$('react_dialogbox').insert({'top': $$('ul.messages')[0]});
+					}
 				}
 				else {
 					self.clearSession();	
