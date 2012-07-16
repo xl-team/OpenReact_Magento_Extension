@@ -8,7 +8,6 @@ class React_React_Helper_Data extends Mage_Core_Helper_Abstract
 	const VAR_AJAX_MODE = 'react_ajax';
 	const CACHE_TAG_PROVIDERS = 'react_providers';
 	const PROVIDERS_LIMIT = 1;
-	const XML_PATH_LOCAL_KEY = 'react/settings/local';
 	
 	/** (string) THe default redirect path 
 	protected $_redirectPath = 'customer/account'; */
@@ -156,14 +155,7 @@ class React_React_Helper_Data extends Mage_Core_Helper_Abstract
  	*/
 	public function decodeApplicationUserId($applicationUserId = '')
 	{
-		$data = base64_decode((string)$applicationUserId);
-		if($data)
-		{
-			$array = explode('|', $data);
-			if(end($array) == Mage::getStoreConfig(self::XML_PATH_LOCAL_KEY))
-				return reset($array);
-		}	
-		return null;
+		return $applicationUserId;
 	}
 	
 	/**
@@ -177,8 +169,7 @@ class React_React_Helper_Data extends Mage_Core_Helper_Abstract
  	*/
 	public function encodeApplicationUserId(Mage_Customer_Model_Customer $customer)
 	{
-		$applicationUserId = $customer->getId().'|'.Mage::getStoreConfig(self::XML_PATH_LOCAL_KEY);
-		return base64_encode($applicationUserId);
+		return $customer->getId();
 	}
 	/**
  		Gets the current redirect path
