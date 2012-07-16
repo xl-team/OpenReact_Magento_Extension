@@ -15,9 +15,11 @@ var React = Class.create({
 	},
 	
 	saveEmail: function() {
-		var email = $('react_email').value;	
-		if(email.strip()) {
-			this.request(this.emailPostUrl+'email/'+email);
+		if (reactEmailForm.validator.validate()) {
+			var email = $('react_email').value;	
+			if (email.strip()) {
+				this.request(this.emailPostUrl+'email/'+email);
+			}
 		}
 	},
 	
