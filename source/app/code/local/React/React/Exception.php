@@ -8,8 +8,14 @@ class React_React_Exception extends Mage_Core_Exception
 	{
 		$admin_code = Mage_Core_Model_Store::ADMIN_CODE;
 		$_helper = Mage::helper('react');
-		$message = (string)end($params);
+		if(reset($params)  == 30101)
+			$message = $_helper->__('You’ve denied access to your account. To login, please allow access.');
+		else
+			$message = (string)end($params);
 		
+		if(!trim($message))
+			$message = $_helper->__('A fatal error has coccurred. Please contact site administrator.');
+			
 		if (Mage::app()->getStore()->getCode() == $admin_code)
 		{
 			Mage::getSingleton('adminhtml/session')->addError($_helper->__($message));
@@ -19,13 +25,12 @@ class React_React_Exception extends Mage_Core_Exception
 		{
 			$response = Mage::getModel('react/ajax_response');
 			$response->addMessage($message);
-			$response->addMessage($_helper->__('Please contact site administrator.'));
 			$response->sendResponse(Mage::app()->getResponse());
 			Mage::app()->getResponse()->sendResponse();
 		}
 		else 
 		{
-			$_helper->getSession()->addError($_helper->__($message))->addError($_helper->__('Please contact site administrator.'));
+			$_helper->getSession()->addError($_helper->__($message));
 			$response = Mage::app()->getResponse()->setRedirect(Mage::getUrl('customer/account'))->sendResponse();
 		}	
 		die();

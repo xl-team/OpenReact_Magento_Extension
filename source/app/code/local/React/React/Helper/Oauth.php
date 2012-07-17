@@ -20,7 +20,6 @@ class React_React_Helper_Oauth extends React_React_Helper_Data
  			$result = $this->_client->OAuthServer->tokenAccess($params, true);
  			$customer_id = $this->decodeApplicationUserId($result['applicationUserId']);
 		}	
- 		
 	 	if ($customer_id) 
 	 	{
 			$customer->load($customer_id);

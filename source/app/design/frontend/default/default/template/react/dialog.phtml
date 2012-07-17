@@ -6,6 +6,7 @@
 	<div id="react_overlay" style="display: none;"></div>
 </div>
 <script type="text/javascript">
+	
 	var reactBox = new React({
 		varName: 'reactBox',
 		translations: {
@@ -18,10 +19,13 @@
 		modeVar: '<?php echo $_helper::VAR_AJAX_MODE ?>',
 		postMessageUrl: '<?php echo $this->getUrl('react/share/messagePost'); ?>'
 	}); 
-	<?php $email_data= $_helper->getSession()->getData($_helper::VAR_NOEMAIL) ?>
-	<?php if($email_data): ?>
-		reactBox.request('<?php echo $this->getUrl('react/index/emailForm'); ?>');
-	<?php elseif($_helper->getSession()->getData($_helper::VAR_SHARE)): ?>
-		reactBox.request('<?php echo $this->getUrl('react/share/message'); ?>')
-	<?php endif; ?>
+	<?php ?>
+	document.observe("dom:loaded", function(){
+		<?php $email_data= $_helper->getSession()->getData($_helper::VAR_NOEMAIL) ?>
+		<?php if($email_data): ?>
+			reactBox.request('<?php echo $this->getUrl('react/index/emailForm'); ?>');
+		<?php elseif($_helper->getSession()->getData($_helper::VAR_SHARE)): ?>
+			reactBox.request('<?php echo $this->getUrl('react/share/message'); ?>')
+		<?php endif; ?>
+	});
 </script>

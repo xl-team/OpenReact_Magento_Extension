@@ -60,9 +60,8 @@ class React_React_Helper_Share extends React_React_Helper_Data
 						$defaults->setImg($img->getUrl());
 					break;
 				case 'category':
-					$_category = Mage::registry('current_category');
-
-					$defaults->setUrl($_category->getUrlPath());
+					$_category = Mage::registry('current_category');	
+					$defaults->setUrl($_category->getUrl());
 					$defaults->setTitle($_category->getName());
 					$defaults->setDescription(nl2br(strip_tags($_category->getDescription())));
 

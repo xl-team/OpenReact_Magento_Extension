@@ -36,8 +36,11 @@ class React_React_Model_Observer
 
 	public function renewSession()
 	{
-		$_helper = Mage::helper('react');
-		$_helper->getSession()->unsetData($_helper::VAR_NOEMAIL);
+ 		$_helper = Mage::helper('react');
+		$share_var = $_helper->getSession()->getData($_helper::VAR_SHARE);
+ 		$_helper->clearSession();
+ 		if($share_var)
+ 			$_helper->getSession()->setData($_helper::VAR_SHARE, $share_var);
 	}
 }
 ?>
