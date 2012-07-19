@@ -220,7 +220,7 @@ class React_React_Helper_Data extends Mage_Core_Helper_Abstract
 			url - (string) The URL 	
  	*/
 	public function setSessionRedirect($url)
-	{
+	{		
 		$this->getSession()->setData(self::VAR_SESSION_REDIRECT, $url);
 	}
 	/**

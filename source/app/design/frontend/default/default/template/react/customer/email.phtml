@@ -27,6 +27,7 @@
 <script type="text/javascript">
 	reactEmailForm = new VarienForm('react-email', true);
 	Event.observe('react-email', 'submit', function(event){
+		reactBox.saveEmail();
 		event.stop();
 	});
 </script>

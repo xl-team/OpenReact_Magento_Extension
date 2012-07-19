@@ -58,6 +58,8 @@ class React_React_Helper_Share extends React_React_Helper_Data
 					$img = array_shift($imgs);
 					if (is_object($img))
 						$defaults->setImg($img->getUrl());
+					else 
+						$defaults->setImg($this->_getDefaultImage());
 					break;
 				case 'category':
 					$_category = Mage::registry('current_category');	
@@ -66,8 +68,10 @@ class React_React_Helper_Share extends React_React_Helper_Data
 					$defaults->setDescription(nl2br(strip_tags($_category->getDescription())));
 
 					$img = $this->_getCategoryThumbnail($_category);
-					if ($img)
+					if (!$img)
 						$img = $_category->getImageUrl();
+					if (!trim($img))
+						$img = $this->_getDefaultImage();
 					$defaults->setImg($img);
 					break;
 				case 'page':

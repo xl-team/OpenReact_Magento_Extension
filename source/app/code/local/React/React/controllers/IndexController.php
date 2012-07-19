@@ -17,10 +17,16 @@ class React_React_IndexController extends Mage_Core_Controller_Front_Action
 		$_helper = Mage::helper('react');
 		$response = Mage::getModel('react/ajax_response');
 		$response->setUrl($this->_getRefererUrl());
+		
+		if($session_url = $_helper->getSessionRedirect())
+			$referer = $session_url;
+		else
+			$referer = $this->_getRefererUrl();
+		
 		if (!$_helper->isLoggedIn())
 		{
-						$provider = $this->getRequest()->getParam('provider');
-			$result = $_helper->login($provider, $this->_getRefererUrl());
+			$provider = $this->getRequest()->getParam('provider');
+			$result = $_helper->login($provider, $referer);
 			if (isset($result['redirectUrl']));
 				$response->setUrl($result['redirectUrl']);
 		}
