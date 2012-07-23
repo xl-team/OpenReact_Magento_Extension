@@ -13,7 +13,6 @@ class React_React_ShareController extends Mage_Core_Controller_Front_Action
 		$_helper->getSession()->setData($_helper::VAR_SHARE, $post);
 		if(!$_helper->isConnected($_helper->getCustomer()))
 		{
-			
 			$block = $this->getLayout()->createBlock('react/customer_login');
 			$block->setFieldset(1);	
 			$block->setTitle($this->__('Social Account'));
@@ -53,8 +52,18 @@ class React_React_ShareController extends Mage_Core_Controller_Front_Action
 		$data = array_merge($data, $post);
 		$message = Mage::getModel('react/share_message')->init($data);
 		$status = $_helper->postMessage($message);	
+		
 		if ($status)
-			$response->addMessage($this->__('Page the page was successfully shared.'));
+		{
+			foreach($status['errors'] as $provider => $data)
+			{
+				$response->addMessage($this->__('There was an error sharing through %s', $provider));
+			}
+			foreach($status['results'] as $provider => $data)
+			{
+				$response->addSuccess($this->__('You have successfully shared this page through %s', $provider));
+			}	
+		}
 		else
 			$response->addMessage($this->__('An error has occured while trying trying to share this page.'));
 		$response->sendResponse($this->getResponse());

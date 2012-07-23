@@ -1,4 +1,7 @@
+<?php foreach($this->getSuccesses() as $success): ?>
+<div class="success-msg react-msg"><?php echo $success ?></div>
+<?php endforeach; ?>
 <?php foreach($this->getErrors() as $error): ?>
-<div class="error-msg react"><?php echo $error ?></div>
+<div class="error-msg react-msg"><?php echo $error ?></div>
 <?php endforeach; ?>
 <button style="margin: 0;" onclick="javascript:reactBox.clearSession()" class="button"><span><span><?php echo $this->__('Continue') ?></span></span></button>

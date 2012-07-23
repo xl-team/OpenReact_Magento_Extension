@@ -55,5 +55,12 @@ class React_React_Model_Observer
  *  			$_helper->getSession()->setData($_helper::VAR_SHARE, $share_var);
  */
 	}
+	
+	public function customerEmailConfirm($event)
+	{
+		$_helper = Mage::helper('react');
+		if ($url = $_helper->getSession()->getData($_helper::VAR_SESSION_CONFIRM_MAIL, true))
+			Mage::app()->getResponse()->setRedirect($url);		
+	}
 }
 ?>

@@ -26,9 +26,9 @@ class React_React_Helper_Share extends React_React_Helper_Data
 				$message['title'],
 				$message['description']
 			);
-			return (bool)$status;
+			return $status;	
 		}
- 
+ 		
 		return false;
 	}
 	

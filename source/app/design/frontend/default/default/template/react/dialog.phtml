@@ -21,10 +21,10 @@
 	}); 
 	<?php ?>
 	document.observe("dom:loaded", function(){
-		<?php $email_data= $_helper->getSession()->getData($_helper::VAR_NOEMAIL) ?>
+		<?php $email_data = $_helper->getSession()->getData($_helper::VAR_NOEMAIL)?>
 		<?php if($email_data): ?>
 			reactBox.request('<?php echo $this->getUrl('react/index/emailForm'); ?>');
-		<?php elseif($_helper->getSession()->getData($_helper::VAR_SHARE)): ?>
+		<?php elseif($_helper->getSession()->getData($_helper::VAR_SHARE) && !$this->getConfirmEmail()): ?>
 			reactBox.request('<?php echo $this->getUrl('react/share/message'); ?>')
 		<?php endif; ?>
 	});

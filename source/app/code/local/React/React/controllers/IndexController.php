@@ -22,7 +22,6 @@ class React_React_IndexController extends Mage_Core_Controller_Front_Action
 			$referer = $session_url;
 		else
 			$referer = $this->_getRefererUrl();
-		
 		if (!$_helper->isLoggedIn())
 		{
 			$provider = $this->getRequest()->getParam('provider');
@@ -32,6 +31,7 @@ class React_React_IndexController extends Mage_Core_Controller_Front_Action
 		}
 		$response->sendResponse($this->getResponse());
 	}
+	
 	/**
 		Processes the information after the tokenRequest method
  	*/
@@ -62,9 +62,16 @@ class React_React_IndexController extends Mage_Core_Controller_Front_Action
 		$result = $_helper->getSession()->getData($_helper::VAR_NOEMAIL, true);
 		if (!$result)
 			return;
+		
+		if($session_url = $_helper->getSessionRedirect())
+			$referer = $session_url;
+		else
+			$referer = $this->_getRefererUrl();
+		$_helper->getSession()->setData($_helper::VAR_SESSION_CONFIRM_MAIL, $referer);	
+		
 		$result['profile']['email'] = $this->getRequest()->getParam('email');
 		$status = $_helper->processLoginRequest($result);
-		if (!$status)
+		if ($status === false)
 		{
 			$response->addMessage($this->__('We are sorry you can not connect using %s.', $result['connectedWithProvider']));
 		}

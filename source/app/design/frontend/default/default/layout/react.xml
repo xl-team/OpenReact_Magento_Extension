@@ -7,9 +7,7 @@
 			<action method="addJs"><script>react/script.js</script></action>
 		</reference>
 		<reference name="content">
-			<block type="core/template" name="react_modalbox">
-				<action method="setTemplate"><template>react/dialog.phtml</template></action>
-			</block>
+			<block type="react/dialog" name="react_modalbox" />
 		</reference>
 	</default>
 	

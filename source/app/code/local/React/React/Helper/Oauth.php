@@ -23,6 +23,16 @@ class React_React_Helper_Oauth extends React_React_Helper_Data
 	 	if ($customer_id) 
 	 	{
 			$customer->load($customer_id);
+			if($customer->getConfirmation())
+			{
+				$error = $this->__('Account confirmation is required. Please, check your email for the confirmation link. To resend the confirmation email please <a href="%s">click here</a>.', 
+   							       Mage::helper('customer')->getEmailConfirmationUrl($customer->getEmail()));
+				if($this->isAjax())
+					return $error;
+				
+				$this->getSession()->addError($error);
+				return null;
+			}
 		}
 		else
 		{
@@ -134,6 +144,7 @@ class React_React_Helper_Oauth extends React_React_Helper_Data
  	*/
 	protected function _createCustomer(Mage_Customer_Model_Customer $customer, array $result)
 	{
+		
 		$profile = $result['profile'];
 
 		if ($profile['email'])
@@ -159,9 +170,32 @@ class React_React_Helper_Oauth extends React_React_Helper_Data
 			}
 
 			$customer->save();
-
 			if ($id = $customer->getId())
 				$this->_client->OAuthServer->tokenSetUserId($this->encodeApplicationUserId($customer), $result['reactOAuthSession']);
+			
+			if ($customer->isConfirmationRequired()) 
+			{ 
+				$customer->sendNewAccountEmail(
+                	'confirmation',
+                    null,
+                    Mage::app()->getStore()->getId()
+                );
+				$this->getSession()->addSuccess(
+					$this->__('Account confirmation is required. Please, check your email for the confirmation link. To resend the confirmation email please <a href="%s">click here</a>.', 
+   							  Mage::helper('customer')->getEmailConfirmationUrl($customer->getEmail()))
+   					);
+				
+				if($this->getSession()->getData(self::VAR_SHARE))
+				{
+					$notice = $this->__('To continue with the shareing process, please confirm your email address. To cancel <a href="%s">click here</a>.', 'javascript:reactBox.clearSession()');
+					$this->getSession()->addNotice($notice);
+			  	}
+			  	return null;
+	  		}                  
+			else
+			{
+				$this->getSession()->unsetData(self::VAR_SESSION_CONFIRM_MAIL);
+			}
 
 			return true;
 		}

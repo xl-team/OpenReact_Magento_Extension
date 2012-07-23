@@ -11,7 +11,8 @@ class React_React_Model_Ajax_Response extends Varien_Object
 			'html' => false,
 			'messages' => array(),
 			'error' => false,
- 		);
+ 			'successes' => array(),	
+		);
 
 		$this->addData($data);
 	}
@@ -22,6 +23,14 @@ class React_React_Model_Ajax_Response extends Varien_Object
 		if($message)
 			$messages[] = (string)$message;
 		$this->setMessages($messages);
+	}
+	
+	public function addSuccess($success = null)
+	{
+		$successes = $this->getSuccesses();
+		if($success)
+			$successes[] = (string)$success;
+		$this->setSuccesses($successes);
 	}
 	
 	/**
@@ -51,10 +60,11 @@ class React_React_Model_Ajax_Response extends Varien_Object
 	 protected function _getMessagesHtml()
 	 {
 	 	$html = '';
-	 	if($messages = $this->getMessages())
+	 	if($this->getMessages() || $this->getSuccesses())
  		{
  	 		$block = Mage::app()->getLayout()->createBlock('core/template')->setTemplate('react/ajax/errors.phtml');
-	 		$block->setErrors($this->getMessages());
+	 		$block->setSuccesses($this->getSuccesses());
+			$block->setErrors($this->getMessages());
 	 		$html = $block->toHtml();
 		}
 		$this->unsetData('messages');

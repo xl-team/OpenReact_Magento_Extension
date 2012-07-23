@@ -80,6 +80,14 @@
 					</react_wishlist_login>	
 				</observers>
 			</controller_action_predispatch_wishlist_index_add>
+			<controller_action_postdispatch_customer_account_confirm>
+				<observers>
+					<react_email_confirm>
+						<class>React_React_Model_Observer</class>
+						<method>customerEmailConfirm</method>
+					</react_email_confirm>	
+				</observers>	
+			</controller_action_postdispatch_customer_account_confirm>
 		</events>
 	</global>
 	<default>

@@ -5,6 +5,7 @@ class React_React_Helper_Data extends Mage_Core_Helper_Abstract
 	const VAR_SHARE = 'react_share_flag';
 	const VAR_SESSION_CONNECTED_PROVIDERS = 'react_connected_providers';
 	const VAR_SESSION_REDIRECT = 'react_session_redirect';
+	const VAR_SESSION_CONFIRM_MAIL = 'react_session_confirm_mail';
 	const VAR_AJAX_MODE = 'react_ajax';
 	const CACHE_TAG_PROVIDERS = 'react_providers';
 	const PROVIDERS_LIMIT = 1;
@@ -35,6 +36,7 @@ class React_React_Helper_Data extends Mage_Core_Helper_Abstract
 	 	
  		Parameters: 
  			 provider - (string) The name of the provider you wish to login with.
+ 			 referer_url - (string) Url to redirect after login
  	*/
   	public function login($provider = '', $referer_url = null)
 	{
@@ -122,7 +124,7 @@ class React_React_Helper_Data extends Mage_Core_Helper_Abstract
  	*/
 	public function isLoggedIn()
 	{
-		return Mage::helper('customer')->isLoggedIn();
+		return Mage::getSingleton('customer/session')->isLoggedIn();
 	}
 	
 	/**
@@ -138,8 +140,7 @@ class React_React_Helper_Data extends Mage_Core_Helper_Abstract
 	public function isConnected(Mage_Customer_Model_Customer $customer, $provider = null)
 	{
 		if(!$this->isLoggedIn())
-			return false;
-						
+			return false;				
 		if (is_null($provider))
 			return (bool)count($this->getConnectedAccounts($customer));
 
@@ -204,13 +205,16 @@ class React_React_Helper_Data extends Mage_Core_Helper_Abstract
 	
 	/**
 		Helper function that returns the redirect url after login
-	
+		
+		Parameters: 
+			clear - (boolean) Clear the session variable? 
+		
 		Returns:
 			(string) - Internerl path for _redirect function
 	*/
-	public function getSessionRedirect()
+	public function getSessionRedirect($clear = true)
 	{
-		return $this->getSession()->getData(self::VAR_SESSION_REDIRECT, true);
+		return $this->getSession()->getData(self::VAR_SESSION_REDIRECT, (bool)$clear);
 	}
 	
 	/**
@@ -231,6 +235,7 @@ class React_React_Helper_Data extends Mage_Core_Helper_Abstract
 		$this->getSession()->unsetData(self::VAR_NOEMAIL);
 		$this->getSession()->unsetData(self::VAR_SESSION_REDIRECT);	
 		$this->getSession()->unsetData(self::VAR_SHARE);
+		$this->getSession()->unsetData(self::VAR_SESSION_CONFIRM_MAIL);
 	}
 	
 	/**
