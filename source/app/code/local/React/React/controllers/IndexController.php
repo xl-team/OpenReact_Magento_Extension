@@ -45,6 +45,12 @@ class React_React_IndexController extends Mage_Core_Controller_Front_Action
 		}
 		else 
 		{
+			if($session_url = $_helper->getSessionRedirect(false))
+				$referer = $session_url;
+			else
+				$referer = $this->_getRefererUrl();
+			$_helper->getSession()->setData($_helper::VAR_SESSION_CONFIRM_MAIL, $referer);
+			
 			$status = $_helper->processLoginRequest();
 			$this->_redirectUrl($_helper->getSessionRedirect());
 		}

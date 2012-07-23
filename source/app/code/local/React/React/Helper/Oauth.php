@@ -56,6 +56,7 @@ class React_React_Helper_Oauth extends React_React_Helper_Data
 			}
 		}
 		
+		$this->getSession()->unsetData(self::VAR_SESSION_CONFIRM_MAIL);
 		$session_redirect = $this->getSessionRedirect();
 		$login_status = Mage::getSingleton('customer/session')->loginById($customer->getId());
 		$this->setSessionRedirect($session_redirect);
@@ -192,10 +193,6 @@ class React_React_Helper_Oauth extends React_React_Helper_Data
 			  	}
 			  	return null;
 	  		}                  
-			else
-			{
-				$this->getSession()->unsetData(self::VAR_SESSION_CONFIRM_MAIL);
-			}
 
 			return true;
 		}
